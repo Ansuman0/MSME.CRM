@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 
 public class BusinessPartnerGenerator {
-	public static final Map<String, String> contactDetails = new HashMap<>();
+	public static final Map<String, String> businessPartnerDetails = new HashMap<>();
 
 	static {
 		Faker faker = new Faker();
@@ -78,57 +78,57 @@ public class BusinessPartnerGenerator {
 		String contactInfoDescription = faker.lorem().sentence();
 
 		// Fill the map with generated values
-		contactDetails.put("companyLogo", companyLogo);
-		contactDetails.put("companyName", companyName);
-		contactDetails.put("companyType", companyType);
-		contactDetails.put("parentCompany", parentCompany);
-		contactDetails.put("cinIip", cinIip);
-		contactDetails.put("gstIn", gstIn);
-		contactDetails.put("panNumber", panNumber);
-		contactDetails.put("phoneNumber", phoneNumber);
-		contactDetails.put("faxNumber", faxNumber);
-		contactDetails.put("email", email);
-		contactDetails.put("website", website);
-		contactDetails.put("gstType", gstType);
-		contactDetails.put("openingBalance", openingBalance);
-		contactDetails.put("accountOwner", accountOwner);
-		contactDetails.put("industry", industry);
-		contactDetails.put("priority", priority);
-		contactDetails.put("source", source);
-		contactDetails.put("corporationDate", corporationDate);
-		contactDetails.put("corporationCountry", corporationCountry);
-		contactDetails.put("location", location);
-		contactDetails.put("description", description);
+		businessPartnerDetails.put("companyLogo", companyLogo);
+		businessPartnerDetails.put("companyName", companyName);
+		businessPartnerDetails.put("companyType", companyType);
+		businessPartnerDetails.put("parentCompany", parentCompany);
+		businessPartnerDetails.put("cinIip", cinIip);
+		businessPartnerDetails.put("gstIn", gstIn);
+		businessPartnerDetails.put("panNumber", panNumber);
+		businessPartnerDetails.put("phoneNumber", phoneNumber);
+		businessPartnerDetails.put("faxNumber", faxNumber);
+		businessPartnerDetails.put("email", email);
+		businessPartnerDetails.put("website", website);
+		businessPartnerDetails.put("gstType", gstType);
+		businessPartnerDetails.put("openingBalance", openingBalance);
+		businessPartnerDetails.put("accountOwner", accountOwner);
+		businessPartnerDetails.put("industry", industry);
+		businessPartnerDetails.put("priority", priority);
+		businessPartnerDetails.put("source", source);
+		businessPartnerDetails.put("corporationDate", corporationDate);
+		businessPartnerDetails.put("corporationCountry", corporationCountry);
+		businessPartnerDetails.put("location", location);
+		businessPartnerDetails.put("description", description);
 
-		contactDetails.put("invAddressline1", invAddressline1);
-		contactDetails.put("invAddressline2", invAddressline2);
-		contactDetails.put("invState", invState);
-		contactDetails.put("invContactName", invContactName);
-		contactDetails.put("invPhone", invPhone);
-		contactDetails.put("invEmail", invEmail);
+		businessPartnerDetails.put("invAddressline1", invAddressline1);
+		businessPartnerDetails.put("invAddressline2", invAddressline2);
+		businessPartnerDetails.put("invState", invState);
+		businessPartnerDetails.put("invContactName", invContactName);
+		businessPartnerDetails.put("invPhone", invPhone);
+		businessPartnerDetails.put("invEmail", invEmail);
 
-		contactDetails.put("delAddressline1", delAddressline1);
-		contactDetails.put("delAddressline2", delAddressline2);
-		contactDetails.put("delState", delState);
-		contactDetails.put("delContactName", delContactName);
-		contactDetails.put("delPhone", delPhone);
-		contactDetails.put("delEmail", delEmail);
+		businessPartnerDetails.put("delAddressline1", delAddressline1);
+		businessPartnerDetails.put("delAddressline2", delAddressline2);
+		businessPartnerDetails.put("delState", delState);
+		businessPartnerDetails.put("delContactName", delContactName);
+		businessPartnerDetails.put("delPhone", delPhone);
+		businessPartnerDetails.put("delEmail", delEmail);
 
-		contactDetails.put("otherAddressline1", otherAddressline1);
-		contactDetails.put("otherAddressline2", otherAddressline2);
-		contactDetails.put("otherState", otherState);
-		contactDetails.put("otherContactName", otherContactName);
-		contactDetails.put("otherPhone", otherPhone);
-		contactDetails.put("otherEmail", otherEmail);
+		businessPartnerDetails.put("otherAddressline1", otherAddressline1);
+		businessPartnerDetails.put("otherAddressline2", otherAddressline2);
+		businessPartnerDetails.put("otherState", otherState);
+		businessPartnerDetails.put("otherContactName", otherContactName);
+		businessPartnerDetails.put("otherPhone", otherPhone);
+		businessPartnerDetails.put("otherEmail", otherEmail);
 
-		contactDetails.put("contactInfoTitle", contactInfoTitle);
-		contactDetails.put("contactInfoName", contactInfoName);
-		contactDetails.put("contactInfoDepartment", contactInfoDepartment);
-		contactDetails.put("contactInfoDesignation", contactInfoDesignation);
-		contactDetails.put("contactInfoEmail", contactInfoEmail);
-		contactDetails.put("contactInfoPhoneNumber", contactInfoPhoneNumber);
-		contactDetails.put("contactInfoAlternativePhoneNumber", contactInfoAlternativePhoneNumber);
-		contactDetails.put("contactInfoDescription", contactInfoDescription);
+		businessPartnerDetails.put("contactInfoTitle", contactInfoTitle);
+		businessPartnerDetails.put("contactInfoName", contactInfoName);
+		businessPartnerDetails.put("contactInfoDepartment", contactInfoDepartment);
+		businessPartnerDetails.put("contactInfoDesignation", contactInfoDesignation);
+		businessPartnerDetails.put("contactInfoEmail", contactInfoEmail);
+		businessPartnerDetails.put("contactInfoPhoneNumber", contactInfoPhoneNumber);
+		businessPartnerDetails.put("contactInfoAlternativePhoneNumber", contactInfoAlternativePhoneNumber);
+		businessPartnerDetails.put("contactInfoDescription", contactInfoDescription);
 	}
 
 	public static String generatePanNumber() {

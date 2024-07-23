@@ -1,4 +1,4 @@
-package pageObjects;
+package pageobjects;
 
 import java.text.ParseException;
 import java.time.Duration;
@@ -16,7 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.text.SimpleDateFormat;
 
 public class BusinessPartners {
-
+	private WebDriver driver;
 	private WebDriverWait wait;
 	private JavascriptExecutor js;
 
@@ -198,9 +198,15 @@ public class BusinessPartners {
 	private WebElement saveBtn;
 
 	public BusinessPartners(WebDriver driver) {
+		this.driver = driver;
 		wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Set the wait timeout to 10 seconds
 		js = (JavascriptExecutor) driver;
 		PageFactory.initElements(driver, this);
+	}
+
+	public void formdropdownLoader(){
+		wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+		wait.until(ExpectedConditions.invisibilityOfAllElements(dropdownSpinner));
 	}
 
 	// Business Library
@@ -221,66 +227,66 @@ public class BusinessPartners {
 		wait.until(ExpectedConditions.elementToBeClickable(isVendorCheckbox)).click();
 	}
 
-	public void AddBusinessPartnerWithCustomer(WebDriver driver, Map<String, String> contactDetails)
+	public void addBusinessPartnerWithCustomer(WebDriver driver, Map<String, String> businessPartnerDetails)
 			throws ParseException {
 
-		// Retrieve values from the contactDetails map
-		String companyLogo = contactDetails.get("companyLogo");
-		String companyName = contactDetails.get("companyName");
-		String companyType = contactDetails.get("companyType");
-		String parentCompany = contactDetails.get("parentCompany");
-		String cinIip = contactDetails.get("cinIip");
-		String gstIn = contactDetails.get("gstIn");
-		String panNumber = contactDetails.get("panNumber");
-		String phoneNumber = contactDetails.get("phoneNumber");
-		String faxNumber = contactDetails.get("faxNumber");
-		String email = contactDetails.get("email");
-		String website = contactDetails.get("website");
-		String gstType = contactDetails.get("gstType");
-		String openingBalance = contactDetails.get("openingBalance");
-		String accountOwner = contactDetails.get("accountOwner");
-		String industry = contactDetails.get("industry");
-		String priority = contactDetails.get("priority");
-		String source = contactDetails.get("source");
-		String corporationDate = contactDetails.get("corporationDate");
-		String corporationCountry = contactDetails.get("corporationCountry");
-		String location = contactDetails.get("location");
-		String description = contactDetails.get("description");
+		// Retrieve values from the businessPartnerDetails map
+		String companyLogo = businessPartnerDetails.get("companyLogo");
+		String companyName = businessPartnerDetails.get("companyName");
+		String companyType = businessPartnerDetails.get("companyType");
+		String parentCompany = businessPartnerDetails.get("parentCompany");
+		String cinIip = businessPartnerDetails.get("cinIip");
+		String gstIn = businessPartnerDetails.get("gstIn");
+		String panNumber = businessPartnerDetails.get("panNumber");
+		String phoneNumber = businessPartnerDetails.get("phoneNumber");
+		String faxNumber = businessPartnerDetails.get("faxNumber");
+		String email = businessPartnerDetails.get("email");
+		String website = businessPartnerDetails.get("website");
+		String gstType = businessPartnerDetails.get("gstType");
+		String openingBalance = businessPartnerDetails.get("openingBalance");
+		String accountOwner = businessPartnerDetails.get("accountOwner");
+		String industry = businessPartnerDetails.get("industry");
+		String priority = businessPartnerDetails.get("priority");
+		String source = businessPartnerDetails.get("source");
+		String corporationDate = businessPartnerDetails.get("corporationDate");
+		String corporationCountry = businessPartnerDetails.get("corporationCountry");
+		String location = businessPartnerDetails.get("location");
+		String description = businessPartnerDetails.get("description");
 
-		String invAddressline1 = contactDetails.get("invAddressline1");
-		String invAddressline2 = contactDetails.get("invAddressline2");
-		String invState = contactDetails.get("invState");
-		String invContactName = contactDetails.get("invContactName");
-		String invPhone = contactDetails.get("invPhone");
-		String invEmail = contactDetails.get("invEmail");
+		String invAddressline1 = businessPartnerDetails.get("invAddressline1");
+		String invAddressline2 = businessPartnerDetails.get("invAddressline2");
+		String invState = businessPartnerDetails.get("invState");
+		String invContactName = businessPartnerDetails.get("invContactName");
+		String invPhone = businessPartnerDetails.get("invPhone");
+		String invEmail = businessPartnerDetails.get("invEmail");
 
-		String delAddressline1 = contactDetails.get("delAddressline1");
-		String delAddressline2 = contactDetails.get("delAddressline2");
-		String delState = contactDetails.get("delState");
-		String delContactName = contactDetails.get("delContactName");
-		String delPhone = contactDetails.get("delPhone");
-		String delEmail = contactDetails.get("delEmail");
+		String delAddressline1 = businessPartnerDetails.get("delAddressline1");
+		String delAddressline2 = businessPartnerDetails.get("delAddressline2");
+		String delState = businessPartnerDetails.get("delState");
+		String delContactName = businessPartnerDetails.get("delContactName");
+		String delPhone = businessPartnerDetails.get("delPhone");
+		String delEmail = businessPartnerDetails.get("delEmail");
 
-		String otherAddressline1 = contactDetails.get("otherAddressline1");
-		String otherAddressline2 = contactDetails.get("otherAddressline2");
-		String otherState = contactDetails.get("otherState");
-		String otherContactName = contactDetails.get("otherContactName");
-		String otherPhone = contactDetails.get("otherPhone");
-		String otherEmail = contactDetails.get("otherEmail");
+		String otherAddressline1 = businessPartnerDetails.get("otherAddressline1");
+		String otherAddressline2 = businessPartnerDetails.get("otherAddressline2");
+		String otherState = businessPartnerDetails.get("otherState");
+		String otherContactName = businessPartnerDetails.get("otherContactName");
+		String otherPhone = businessPartnerDetails.get("otherPhone");
+		String otherEmail = businessPartnerDetails.get("otherEmail");
 
-		String contactInfoTitle = contactDetails.get("contactInfoTitle");
-		String contactInfoName = contactDetails.get("contactInfoName");
-		String contactInfoDepartment = contactDetails.get("contactInfoDepartment");
-		String contactInfoDesignation = contactDetails.get("contactInfoDesignation");
-		String contactInfoEmail = contactDetails.get("contactInfoEmail");
-		String contactInfoPhoneNumber = contactDetails.get("contactInfoPhoneNumber");
-		String contactInfoAlternativePhoneNumber = contactDetails.get("contactInfoAlternativePhoneNumber");
-		String contactInfoDescription = contactDetails.get("contactInfoDescription");
+		String contactInfoTitle = businessPartnerDetails.get("contactInfoTitle");
+		String contactInfoName = businessPartnerDetails.get("contactInfoName");
+		String contactInfoDepartment = businessPartnerDetails.get("contactInfoDepartment");
+		String contactInfoDesignation = businessPartnerDetails.get("contactInfoDesignation");
+		String contactInfoEmail = businessPartnerDetails.get("contactInfoEmail");
+		String contactInfoPhoneNumber = businessPartnerDetails.get("contactInfoPhoneNumber");
+		String contactInfoAlternativePhoneNumber = businessPartnerDetails.get("contactInfoAlternativePhoneNumber");
+		String contactInfoDescription = businessPartnerDetails.get("contactInfoDescription");
 
 		// Fill in the fields
 		// Company Details
 		js.executeScript("return document.readyState").toString().equals("complete");
-		wait.until(ExpectedConditions.invisibilityOfAllElements(dropdownSpinner));
+		formdropdownLoader();
 
 		clickIsCustomerCheckbox();
 		companyNameTxt.sendKeys(companyName);
@@ -365,7 +371,7 @@ public class BusinessPartners {
 		contactInfoDescriptionTxt.sendKeys(contactInfoDescription);
 
 		// Save
-		//saveBtn.click();
+		saveBtn.click();
 
 	}
 
