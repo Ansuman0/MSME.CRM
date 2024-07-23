@@ -1,10 +1,9 @@
 package BusinessPartnerTest;
 
 import org.testng.annotations.Test;
-
 import dataGenrator.BusinessPartnerGenerator;
-import pageObjects.BusinessPartners;
-import pageObjects.HomePage;
+import pageobjects.BusinessPartners;
+import pageobjects.HomePage;
 import utilities.BaseClass;
 
 import java.text.ParseException;
@@ -18,7 +17,7 @@ public class BusinessPartnerWithCustomer extends BaseClass {
 
 		BusinessPartners bpPage = new BusinessPartners(driver);
 		bpPage.clickOnaddIcon();
-		bpPage.AddBusinessPartnerWithCustomer(driver, BusinessPartnerGenerator.contactDetails);
+		bpPage.addBusinessPartnerWithCustomer(driver, BusinessPartnerGenerator.businessPartnerDetails);
 	}
 
 }
