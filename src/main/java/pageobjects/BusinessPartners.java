@@ -229,7 +229,6 @@ public class BusinessPartners {
 
 	public void addBusinessPartnerWithCustomer(WebDriver driver, Map<String, String> businessPartnerDetails)
 			throws ParseException {
-
 		// Retrieve values from the businessPartnerDetails map
 		String companyLogo = businessPartnerDetails.get("companyLogo");
 		String companyName = businessPartnerDetails.get("companyName");
@@ -374,5 +373,302 @@ public class BusinessPartners {
 		saveBtn.click();
 
 	}
+
+	public void addBusinessPartnerWithVendor(WebDriver driver, Map<String, String> businessPartnerDetails)
+			throws ParseException {
+
+		// Retrieve values from the businessPartnerDetails map
+		String companyLogo = businessPartnerDetails.get("companyLogo");
+		String companyName = businessPartnerDetails.get("companyName");
+		String companyType = businessPartnerDetails.get("companyType");
+		String parentCompany = businessPartnerDetails.get("parentCompany");
+		String cinIip = businessPartnerDetails.get("cinIip");
+		String gstIn = businessPartnerDetails.get("gstIn");
+		String panNumber = businessPartnerDetails.get("panNumber");
+		String phoneNumber = businessPartnerDetails.get("phoneNumber");
+		String faxNumber = businessPartnerDetails.get("faxNumber");
+		String email = businessPartnerDetails.get("email");
+		String website = businessPartnerDetails.get("website");
+		String gstType = businessPartnerDetails.get("gstType");
+		String openingBalance = businessPartnerDetails.get("openingBalance");
+		String accountOwner = businessPartnerDetails.get("accountOwner");
+		String industry = businessPartnerDetails.get("industry");
+		String priority = businessPartnerDetails.get("priority");
+		String source = businessPartnerDetails.get("source");
+		String corporationDate = businessPartnerDetails.get("corporationDate");
+		String corporationCountry = businessPartnerDetails.get("corporationCountry");
+		String location = businessPartnerDetails.get("location");
+		String description = businessPartnerDetails.get("description");
+
+		String invAddressline1 = businessPartnerDetails.get("invAddressline1");
+		String invAddressline2 = businessPartnerDetails.get("invAddressline2");
+		String invState = businessPartnerDetails.get("invState");
+		String invContactName = businessPartnerDetails.get("invContactName");
+		String invPhone = businessPartnerDetails.get("invPhone");
+		String invEmail = businessPartnerDetails.get("invEmail");
+
+		String delAddressline1 = businessPartnerDetails.get("delAddressline1");
+		String delAddressline2 = businessPartnerDetails.get("delAddressline2");
+		String delState = businessPartnerDetails.get("delState");
+		String delContactName = businessPartnerDetails.get("delContactName");
+		String delPhone = businessPartnerDetails.get("delPhone");
+		String delEmail = businessPartnerDetails.get("delEmail");
+
+		String otherAddressline1 = businessPartnerDetails.get("otherAddressline1");
+		String otherAddressline2 = businessPartnerDetails.get("otherAddressline2");
+		String otherState = businessPartnerDetails.get("otherState");
+		String otherContactName = businessPartnerDetails.get("otherContactName");
+		String otherPhone = businessPartnerDetails.get("otherPhone");
+		String otherEmail = businessPartnerDetails.get("otherEmail");
+
+		String contactInfoTitle = businessPartnerDetails.get("contactInfoTitle");
+		String contactInfoName = businessPartnerDetails.get("contactInfoName");
+		String contactInfoDepartment = businessPartnerDetails.get("contactInfoDepartment");
+		String contactInfoDesignation = businessPartnerDetails.get("contactInfoDesignation");
+		String contactInfoEmail = businessPartnerDetails.get("contactInfoEmail");
+		String contactInfoPhoneNumber = businessPartnerDetails.get("contactInfoPhoneNumber");
+		String contactInfoAlternativePhoneNumber = businessPartnerDetails.get("contactInfoAlternativePhoneNumber");
+		String contactInfoDescription = businessPartnerDetails.get("contactInfoDescription");
+
+		// Fill in the fields
+		// Company Details
+		js.executeScript("return document.readyState").toString().equals("complete");
+		formdropdownLoader();
+
+		clickIsVendorCheckbox();
+		companyNameTxt.sendKeys(companyName);
+
+		wait.until(ExpectedConditions.visibilityOf(companyTypeDrp));
+		WebDriverUtility.handleDropDown("HUF", companyTypeDrp);
+
+		parentCompanyTypeTxt.sendKeys(parentCompany);
+		cinIipTxt.sendKeys(cinIip);
+		gstInTxt.sendKeys(gstIn);
+		/*
+		 * panNumberTxt.clear(); panNumberTxt.sendKeys(panNumber);
+		 */
+		panNumberTxt.sendKeys(panNumber);
+		phoneNumberTxt.sendKeys(phoneNumber);
+		faxNumberTxt.sendKeys(faxNumber);
+		emailTxt.sendKeys(email);
+		websiteTxt.sendKeys(website);
+
+		wait.until(ExpectedConditions.visibilityOf(gstTypeDrp));
+		WebDriverUtility.handleDropDown(gstTypeDrp, "Registered Business - Regular");
+		openingBalanceTxt.sendKeys(openingBalance);
+
+		// Company Info
+		wait.until(ExpectedConditions.visibilityOf(industryDrp));
+		WebDriverUtility.handleDropDown("Education", industryDrp);
+		accountOwnerTxt.sendKeys(accountOwner);
+
+		wait.until(ExpectedConditions.visibilityOf(priorityDrp));
+		WebDriverUtility.handleDropDown("1", priorityDrp);
+
+		wait.until(ExpectedConditions.visibilityOf(sourceDrp));
+		WebDriverUtility.handleDropDown("Web", sourceDrp);
+		corporationDateTxt.sendKeys(new SimpleDateFormat("dd-MM-yyyy").format(
+				new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", java.util.Locale.ENGLISH).parse(corporationDate)));
+
+		wait.until(ExpectedConditions.visibilityOf(corporationCountryDrp));
+		WebDriverUtility.handleDropDown("India", corporationCountryDrp);
+		locationTxt.sendKeys(location);
+		descriptionTxt.sendKeys(description);
+
+		// Address Details
+		invAddressline1Txt.sendKeys(invAddressline1);
+		invAddressline2Txt.sendKeys(invAddressline2);
+
+		wait.until(ExpectedConditions.visibilityOf(invStateDrp));
+		WebDriverUtility.handleDropDown("Telangana", invStateDrp);
+		invContactNameTxt.sendKeys(invContactName);
+		invPhoneTxt.sendKeys(invPhone);
+		invEmailTxt.sendKeys(invEmail);
+
+		// Delivery Address
+		delAddressline1Txt.sendKeys(delAddressline1);
+		delAddressline2Txt.sendKeys(delAddressline2);
+
+		wait.until(ExpectedConditions.visibilityOf(delStateDrp));
+		WebDriverUtility.handleDropDown("Telangana", delStateDrp);
+		delContactNameTxt.sendKeys(delContactName);
+		delPhoneTxt.sendKeys(delPhone);
+		delEmailTxt.sendKeys(delEmail);
+
+		// Other Address
+		otherAddressline1Txt.sendKeys(otherAddressline1);
+		otherAddressline2Txt.sendKeys(otherAddressline2);
+
+		wait.until(ExpectedConditions.visibilityOf(otherStateDrp));
+		WebDriverUtility.handleDropDown("Telangana", otherStateDrp);
+
+		otherContactNameTxt.sendKeys(otherContactName);
+		otherPhoneTxt.sendKeys(otherPhone);
+		otherEmailTxt.sendKeys(otherEmail);
+
+		// Key Contact Info
+		wait.until(ExpectedConditions.visibilityOf(contactInfoTitleDrp));
+		WebDriverUtility.handleDropDown("Mr", contactInfoTitleDrp);
+		contactInfoNameTxt.sendKeys(contactInfoName);
+		contactInfoDepartmentTxt.sendKeys(contactInfoDepartment);
+		contactInfoDesignationTxt.sendKeys(contactInfoDesignation);
+		contactInfoEmailTxt.sendKeys(contactInfoEmail);
+		contactInfoPhonenumberTxt.sendKeys(contactInfoPhoneNumber);
+		contactInfoAlernativePhonenumberTxt.sendKeys(contactInfoAlternativePhoneNumber);
+		contactInfoDescriptionTxt.sendKeys(contactInfoDescription);
+
+		// Save
+		saveBtn.click();
+
+	}
+	public void addBusinessPartner(WebDriver driver, Map<String, String> businessPartnerDetails)
+			throws ParseException {
+
+		// Retrieve values from the businessPartnerDetails map
+		String companyLogo = businessPartnerDetails.get("companyLogo");
+		String companyName = businessPartnerDetails.get("companyName");
+		String companyType = businessPartnerDetails.get("companyType");
+		String parentCompany = businessPartnerDetails.get("parentCompany");
+		String cinIip = businessPartnerDetails.get("cinIip");
+		String gstIn = businessPartnerDetails.get("gstIn");
+		String panNumber = businessPartnerDetails.get("panNumber");
+		String phoneNumber = businessPartnerDetails.get("phoneNumber");
+		String faxNumber = businessPartnerDetails.get("faxNumber");
+		String email = businessPartnerDetails.get("email");
+		String website = businessPartnerDetails.get("website");
+		String gstType = businessPartnerDetails.get("gstType");
+		String openingBalance = businessPartnerDetails.get("openingBalance");
+		String accountOwner = businessPartnerDetails.get("accountOwner");
+		String industry = businessPartnerDetails.get("industry");
+		String priority = businessPartnerDetails.get("priority");
+		String source = businessPartnerDetails.get("source");
+		String corporationDate = businessPartnerDetails.get("corporationDate");
+		String corporationCountry = businessPartnerDetails.get("corporationCountry");
+		String location = businessPartnerDetails.get("location");
+		String description = businessPartnerDetails.get("description");
+
+		String invAddressline1 = businessPartnerDetails.get("invAddressline1");
+		String invAddressline2 = businessPartnerDetails.get("invAddressline2");
+		String invState = businessPartnerDetails.get("invState");
+		String invContactName = businessPartnerDetails.get("invContactName");
+		String invPhone = businessPartnerDetails.get("invPhone");
+		String invEmail = businessPartnerDetails.get("invEmail");
+
+		String delAddressline1 = businessPartnerDetails.get("delAddressline1");
+		String delAddressline2 = businessPartnerDetails.get("delAddressline2");
+		String delState = businessPartnerDetails.get("delState");
+		String delContactName = businessPartnerDetails.get("delContactName");
+		String delPhone = businessPartnerDetails.get("delPhone");
+		String delEmail = businessPartnerDetails.get("delEmail");
+
+		String otherAddressline1 = businessPartnerDetails.get("otherAddressline1");
+		String otherAddressline2 = businessPartnerDetails.get("otherAddressline2");
+		String otherState = businessPartnerDetails.get("otherState");
+		String otherContactName = businessPartnerDetails.get("otherContactName");
+		String otherPhone = businessPartnerDetails.get("otherPhone");
+		String otherEmail = businessPartnerDetails.get("otherEmail");
+
+		String contactInfoTitle = businessPartnerDetails.get("contactInfoTitle");
+		String contactInfoName = businessPartnerDetails.get("contactInfoName");
+		String contactInfoDepartment = businessPartnerDetails.get("contactInfoDepartment");
+		String contactInfoDesignation = businessPartnerDetails.get("contactInfoDesignation");
+		String contactInfoEmail = businessPartnerDetails.get("contactInfoEmail");
+		String contactInfoPhoneNumber = businessPartnerDetails.get("contactInfoPhoneNumber");
+		String contactInfoAlternativePhoneNumber = businessPartnerDetails.get("contactInfoAlternativePhoneNumber");
+		String contactInfoDescription = businessPartnerDetails.get("contactInfoDescription");
+
+		// Fill in the fields
+		// Company Details
+		js.executeScript("return document.readyState").toString().equals("complete");
+		formdropdownLoader();
+
+		clickIsCustomerCheckbox();
+		clickIsVendorCheckbox();
+		companyNameTxt.sendKeys(companyName);
+
+		wait.until(ExpectedConditions.visibilityOf(companyTypeDrp));
+		WebDriverUtility.handleDropDown("HUF", companyTypeDrp);
+
+		parentCompanyTypeTxt.sendKeys(parentCompany);
+		cinIipTxt.sendKeys(cinIip);
+		gstInTxt.sendKeys(gstIn);
+		/*
+		 * panNumberTxt.clear(); panNumberTxt.sendKeys(panNumber);
+		 */
+		panNumberTxt.sendKeys(panNumber);
+		phoneNumberTxt.sendKeys(phoneNumber);
+		faxNumberTxt.sendKeys(faxNumber);
+		emailTxt.sendKeys(email);
+		websiteTxt.sendKeys(website);
+
+		wait.until(ExpectedConditions.visibilityOf(gstTypeDrp));
+		WebDriverUtility.handleDropDown(gstTypeDrp, "Registered Business - Regular");
+		openingBalanceTxt.sendKeys(openingBalance);
+
+		// Company Info
+		wait.until(ExpectedConditions.visibilityOf(industryDrp));
+		WebDriverUtility.handleDropDown("Education", industryDrp);
+		accountOwnerTxt.sendKeys(accountOwner);
+
+		wait.until(ExpectedConditions.visibilityOf(priorityDrp));
+		WebDriverUtility.handleDropDown("1", priorityDrp);
+
+		wait.until(ExpectedConditions.visibilityOf(sourceDrp));
+		WebDriverUtility.handleDropDown("Web", sourceDrp);
+		corporationDateTxt.sendKeys(new SimpleDateFormat("dd-MM-yyyy").format(
+				new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", java.util.Locale.ENGLISH).parse(corporationDate)));
+
+		wait.until(ExpectedConditions.visibilityOf(corporationCountryDrp));
+		WebDriverUtility.handleDropDown("India", corporationCountryDrp);
+		locationTxt.sendKeys(location);
+		descriptionTxt.sendKeys(description);
+
+		// Address Details
+		invAddressline1Txt.sendKeys(invAddressline1);
+		invAddressline2Txt.sendKeys(invAddressline2);
+
+		wait.until(ExpectedConditions.visibilityOf(invStateDrp));
+		WebDriverUtility.handleDropDown("Telangana", invStateDrp);
+		invContactNameTxt.sendKeys(invContactName);
+		invPhoneTxt.sendKeys(invPhone);
+		invEmailTxt.sendKeys(invEmail);
+
+		// Delivery Address
+		delAddressline1Txt.sendKeys(delAddressline1);
+		delAddressline2Txt.sendKeys(delAddressline2);
+
+		wait.until(ExpectedConditions.visibilityOf(delStateDrp));
+		WebDriverUtility.handleDropDown("Telangana", delStateDrp);
+		delContactNameTxt.sendKeys(delContactName);
+		delPhoneTxt.sendKeys(delPhone);
+		delEmailTxt.sendKeys(delEmail);
+
+		// Other Address
+		otherAddressline1Txt.sendKeys(otherAddressline1);
+		otherAddressline2Txt.sendKeys(otherAddressline2);
+
+		wait.until(ExpectedConditions.visibilityOf(otherStateDrp));
+		WebDriverUtility.handleDropDown("Telangana", otherStateDrp);
+
+		otherContactNameTxt.sendKeys(otherContactName);
+		otherPhoneTxt.sendKeys(otherPhone);
+		otherEmailTxt.sendKeys(otherEmail);
+
+		// Key Contact Info
+		wait.until(ExpectedConditions.visibilityOf(contactInfoTitleDrp));
+		WebDriverUtility.handleDropDown("Mr", contactInfoTitleDrp);
+		contactInfoNameTxt.sendKeys(contactInfoName);
+		contactInfoDepartmentTxt.sendKeys(contactInfoDepartment);
+		contactInfoDesignationTxt.sendKeys(contactInfoDesignation);
+		contactInfoEmailTxt.sendKeys(contactInfoEmail);
+		contactInfoPhonenumberTxt.sendKeys(contactInfoPhoneNumber);
+		contactInfoAlernativePhonenumberTxt.sendKeys(contactInfoAlternativePhoneNumber);
+		contactInfoDescriptionTxt.sendKeys(contactInfoDescription);
+
+		// Save
+		saveBtn.click();
+
+	}
+
 
 }

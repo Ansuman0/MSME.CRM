@@ -2,8 +2,6 @@ package constants;
 
 import enums.ConfigProperties;
 import utilities.PropertyUtils;
-
-import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
