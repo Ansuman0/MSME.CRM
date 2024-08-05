@@ -15,7 +15,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.text.SimpleDateFormat;
 
-public class BusinessPartners {
+public class BusinessPartnersPage {
 	private WebDriver driver;
 	private WebDriverWait wait;
 	private JavascriptExecutor js;
@@ -197,7 +197,7 @@ public class BusinessPartners {
 	@FindBy(xpath = "//button[contains(@class, 'custom-btn') and contains(text(),'Save')]")
 	private WebElement saveBtn;
 
-	public BusinessPartners(WebDriver driver) {
+	public BusinessPartnersPage(WebDriver driver) {
 		this.driver = driver;
 		wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Set the wait timeout to 10 seconds
 		js = (JavascriptExecutor) driver;
