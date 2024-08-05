@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 import driverFactories.Driver;
 import driverFactories.DriverFactory;
 import enums.ConfigProperties;
-import pageObjects.LoginPage;
+import pageobjects.LoginPage;
 
 import org.testng.ITestContext;
 import org.testng.annotations.*;
