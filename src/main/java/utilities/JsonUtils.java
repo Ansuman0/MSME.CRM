@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import constants.FrameworkConstants;
 import enums.ConfigProperties;
+import exceptions.PropertyFileUsageException;
 import lombok.experimental.UtilityClass;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -34,7 +35,8 @@ public class JsonUtils {
 
 	public static String get(ConfigProperties key) throws Exception {
 		if (Objects.isNull(key) || Objects.isNull(CONFIGMAP.get(key.name().toLowerCase()))) {
-			throw new Exception("Property name " + key + " is not found. Please check config.json");
+			throw new PropertyFileUsageException(
+					"Property name " + key + " is not found. Please check config.Json File.");
 		}
 		return CONFIGMAP.get(key.name().toLowerCase());
 	}
