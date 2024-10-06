@@ -30,7 +30,7 @@ public class BusinessPartnerGenerator {
 		String companyType = faker.company().industry();
 		String parentCompany = faker.company().name();
 		String cinIip = faker.idNumber().valid();
-		String gstIn = faker.finance().iban(); // Note: Adjust this as needed
+		String gstIn = generateGstin();
 		String panNumber = generatePanNumber(); // Note: Adjust this as needed
 		String phoneNumber = faker.phoneNumber().phoneNumber();
 		String faxNumber = faker.phoneNumber().phoneNumber();
@@ -135,31 +135,27 @@ public class BusinessPartnerGenerator {
 		final Faker FAKER = new Faker();
 		StringBuilder panNumber = new StringBuilder();
 
-		// Generate first 3 alphabetic characters
+		// Generate first 3 alphabetic characters (A-Z)
 		for (int i = 0; i < 3; i++) {
-			panNumber.append((char) (FAKER.random().nextInt(26) + 'A'));
+			panNumber.append((char) ('A' + FAKER.random().nextInt(26)));
 		}
 
 		// The fourth character based on the type of assesses
 		char[] assesseeTypes = { 'C', 'P', 'H', 'F', 'A', 'T', 'B', 'L', 'J', 'G' };
-		char fourthCharacter = assesseeTypes[FAKER.random().nextInt(assesseeTypes.length)];
-		panNumber.append(fourthCharacter);
+		panNumber.append(assesseeTypes[FAKER.random().nextInt(assesseeTypes.length)]);
 
-		// The fifth character is the first character of the surname / last name
-		// Here, for simplicity, we randomly choose a character
-		char fifthCharacter = (char) (FAKER.random().nextInt(26) + 'A');
-		panNumber.append(fifthCharacter);
+		// The fifth character, randomly chosen (A-Z)
+		panNumber.append((char) ('A' + FAKER.random().nextInt(26)));
 
-		// Generate next 4 numeric characters
+		// Generate next 4 numeric characters (0-9)
 		for (int i = 0; i < 4; i++) {
 			panNumber.append(FAKER.random().nextInt(10));
 		}
 
-		// Generate last alphabetic character
-		panNumber.append((char) (FAKER.random().nextInt(26) + 'A'));
+		// Generate last alphabetic character (A-Z)
+		panNumber.append((char) ('A' + FAKER.random().nextInt(26)));
 
 		return panNumber.toString();
-
 	}
 
 	public static String generateImageAsBase64Jpg() throws IOException {
@@ -185,4 +181,24 @@ public class BusinessPartnerGenerator {
 		return Base64.getEncoder().encodeToString(imageBytes);
 	}
 
+	public static String generateGstin() {
+		final Faker FAKER = new Faker();
+		String[] stateCodes = {
+				"01", "02", "03", "04", "05", "06", "07", "08", "09", "10",
+				"11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+				"21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
+				"31", "32", "33", "34", "35", "36", "37"
+		};
+
+		// Select a random state code
+		String stateCode = stateCodes[FAKER.random().nextInt(stateCodes.length)];
+
+		String pan = generatePanNumber(); // Generate a 10-character PAN number
+		String entityCode = "1"; // Hardcoded entity code
+		String blankChar = "Z";  // Default blank character for GSTIN
+		String checkDigit = FAKER.regexify("[A-Z0-9]"); // Generate a check digit (alphanumeric)
+
+		// Construct GSTIN: State Code (2) + PAN (10) + Entity Code (1) + Blank (1) + Check Digit (1) = 15 characters
+		return stateCode + pan + entityCode + blankChar + checkDigit;
+	}
 }

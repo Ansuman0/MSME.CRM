@@ -1,125 +1,145 @@
 package driverFactories;
 
+import exceptions.DriverCreationException; // Import your custom exception
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.PageLoadStrategy;
 import org.testng.annotations.Parameters;
 
 import enums.ConfigProperties;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import utilities.JsonUtils;
 import utilities.PropertyUtils;
 
 import java.net.URI;
 import java.net.URL;
+import java.util.HashMap;
+import org.openqa.selenium.MutableCapabilities;
 
 public final class DriverFactory {
 
-	private DriverFactory() {
-	}
+    private DriverFactory() {
+    }
 
-	public static String browserVersion = "";
-	public static String browserName = "";
+    public static String browserVersion = "";
+    public static String browserName = "";
+    static WebDriverManager driverManager;
 
-	@Parameters("browser")
-	public static WebDriver getDriver(String browser, String version) throws Exception {
+    @Parameters("browser")
+    public static WebDriver getDriver(String browser, String version) throws Exception {
+        WebDriver driver;
+        String runMode = PropertyUtils.get(ConfigProperties.RUNMODE);
 
-		WebDriver driver = null;
-		Capabilities caps = null;
+        switch (runMode.toLowerCase()) {
+            case "local":
+                driver = createLocalDriver(browser);
+                break;
+            case "remote":
+                driver = createRemoteDriver(getBrowserOptions(browser));
+                break;
+            case "lambdatest":
+                driver = createLambdaTestDriver(browser);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported run mode: " + runMode);
+        }
 
-		String runmode = PropertyUtils.get(ConfigProperties.RUNMODE);
-		if (browser.equalsIgnoreCase("chrome")) {
-			if (runmode.equalsIgnoreCase("remote")) {
-				ChromeOptions options = new ChromeOptions();
-				options.addArguments("--incognito");
-				options.addArguments("--start-maximized");
-				options.setAcceptInsecureCerts(true);
-				options.setPageLoadStrategy(PageLoadStrategy.EAGER);
+        setBrowserDetails(driver);
+        return driver;
+    }
 
-				DesiredCapabilities cap = new DesiredCapabilities();
-				cap.setCapability(ChromeOptions.CAPABILITY, options);
-				options.merge(cap);
+    private static WebDriver createLocalDriver(String browser) {
 
-				URI seleniumGridUri = new URI(PropertyUtils.get(ConfigProperties.SELENIUMGRIDURL));
-				URL seleniumGridUrl = seleniumGridUri.toURL();
-				driver = new RemoteWebDriver(seleniumGridUrl, cap);
+        switch (browser.toLowerCase()) {
 
-			} else {
-				WebDriverManager.chromedriver().setup();
-				ChromeOptions options = new ChromeOptions();
-				options.addArguments("--incognito");
-				options.addArguments("--start-maximized");
-				options.setPageLoadStrategy(PageLoadStrategy.EAGER);
-				driver = new ChromeDriver(options);
-				caps = ((RemoteWebDriver) driver).getCapabilities();
-				browserVersion = caps.getBrowserVersion();
-				browserName = caps.getBrowserName();
-				System.out.println("------" + browserName);
+            case "chrome":
+                driverManager = WebDriverManager.chromedriver();
+                ChromeOptions chromeOptions = new ChromeOptions();
+                setCommonOptions(chromeOptions);
+                return new ChromeDriver(chromeOptions);
+            case "firefox":
+                driverManager = WebDriverManager.firefoxdriver();
+                FirefoxOptions firefoxOptions = new FirefoxOptions();
+                setCommonOptions(firefoxOptions);
+                return new FirefoxDriver(firefoxOptions);
+            case "edge":
+                driverManager = WebDriverManager.edgedriver();
+                EdgeOptions edgeOptions = new EdgeOptions();
+                setCommonOptions(edgeOptions);
+                return new EdgeDriver(edgeOptions);
+            default:
+                throw new IllegalArgumentException("Unsupported browser: " + browser);
+        }
+    }
 
-			}
-		} else if (browser.equalsIgnoreCase("firefox")) {
-			if (runmode.equalsIgnoreCase("remote")) {
-				FirefoxOptions options = new FirefoxOptions();
-				options.addArguments("--start-maximized");
-				options.addArguments("-private");
-				options.setAcceptInsecureCerts(true);
-				options.setPageLoadStrategy(PageLoadStrategy.EAGER);
+    private static MutableCapabilities getBrowserOptions(String browser) {
+        switch (browser.toLowerCase()) {
+            case "chrome":
+                return new ChromeOptions();
+            case "firefox":
+                return new FirefoxOptions();
+            case "edge":
+                return new EdgeOptions();
+            default:
+                throw new IllegalArgumentException("Unsupported browser: " + browser);
+        }
+    }
 
-				DesiredCapabilities cap = new DesiredCapabilities();
-				cap.setCapability(FirefoxOptions.FIREFOX_OPTIONS, options);
-				cap.getBrowserVersion();
+    private static WebDriver createRemoteDriver(MutableCapabilities options) throws DriverCreationException {
+        try {
+            setCommonOptions(options);
+            URI seleniumGridUri = new URI(JsonUtils.get(ConfigProperties.SELENIUMGRIDURL));
+            URL seleniumGridUrl = seleniumGridUri.toURL();
+            return new RemoteWebDriver(seleniumGridUrl, options);
+        } catch (Exception e) {
+            throw new DriverCreationException("Failed to create Remote WebDriver", e);
+        }
+    }
 
-				URI seleniumGridUri = new URI(PropertyUtils.get(ConfigProperties.SELENIUMGRIDURL));
-				URL seleniumGridUrl = seleniumGridUri.toURL();
-				driver = new RemoteWebDriver(seleniumGridUrl, cap);
-			} else {
-				WebDriverManager.firefoxdriver().setup();
-				FirefoxOptions options = new FirefoxOptions();
-				options.addArguments("--incognito");
-				options.addArguments("--start-maximized");
-				options.setPageLoadStrategy(PageLoadStrategy.EAGER);
-				driver = new FirefoxDriver(options);
-				caps = ((RemoteWebDriver) driver).getCapabilities();
-				browserVersion = caps.getBrowserVersion();
-				browserName = caps.getBrowserName();
-				System.out.println("------" + browserName);
+    private static WebDriver createLambdaTestDriver(String browser) throws Exception {
+        MutableCapabilities browserOptions = getBrowserOptions(browser);
 
-			}
-		} else if (browser.equalsIgnoreCase("edge")) {
-			if (runmode.equalsIgnoreCase("remote")) {
-				EdgeOptions options = new EdgeOptions();
-				options.addArguments("--start-maximized");
-				options.addArguments("-private");
-				options.setAcceptInsecureCerts(true);
-				options.setPageLoadStrategy(PageLoadStrategy.EAGER);
+        // Add LambdaTest specific capabilities
+        HashMap<String, Object> ltOptions = new HashMap<>();
+        ltOptions.put("username", JsonUtils.get(ConfigProperties.USERNAME));
+        ltOptions.put("accessKey", JsonUtils.get(ConfigProperties.ACCESSKEY));
+        ltOptions.put("project", JsonUtils.get(ConfigProperties.PROJECT));
+        ltOptions.put("selenium_version", JsonUtils.get(ConfigProperties.SELENIUMVERSION));
+        ltOptions.put("w3c", true);
 
-				DesiredCapabilities cap = new DesiredCapabilities();
-				cap.setCapability(EdgeOptions.CAPABILITY, options);
-				cap.getBrowserVersion();
+        browserOptions.setCapability("LT:Options", ltOptions);
 
-				URI seleniumGridUri = new URI(PropertyUtils.get(ConfigProperties.SELENIUMGRIDURL));
-				URL seleniumGridUrl = seleniumGridUri.toURL();
-				driver = new RemoteWebDriver(seleniumGridUrl, cap);
-			} else {
-				WebDriverManager.edgedriver().setup();
-				EdgeOptions options = new EdgeOptions();
-				options.addArguments("--incognito");
-				options.setPageLoadStrategy(PageLoadStrategy.EAGER);
-				driver = new EdgeDriver(options);
-				caps = ((RemoteWebDriver) driver).getCapabilities();
-				browserVersion = caps.getBrowserVersion();
-				browserName = caps.getBrowserName();
-				System.out.println("------" + browserName);
+        try {
+            URI lambdaTestUri = new URI(JsonUtils.get(ConfigProperties.LAMBDAURL));
+            URL lambdaTestUrl = lambdaTestUri.toURL();
+            return new RemoteWebDriver(lambdaTestUrl, browserOptions);
+        } catch (Exception e) {
+            throw new DriverCreationException("Failed to create LambdaTest WebDriver", e);
+        }
+    }
 
-			}
-		}
-		return driver;
-	}
+    private static void setCommonOptions(MutableCapabilities options) {
+        options.setCapability("acceptInsecureCerts", true);
+        options.setCapability("pageLoadStrategy", PageLoadStrategy.EAGER);
+
+        if (options instanceof ChromeOptions || options instanceof FirefoxOptions) {
+            ((ChromeOptions) options).addArguments("--incognito", "--start-maximized");
+        } else if (options instanceof EdgeOptions) {
+            ((EdgeOptions) options).addArguments("--start-maximized");
+        }
+    }
+
+    private static void setBrowserDetails(WebDriver driver) {
+        if (driver instanceof RemoteWebDriver) {
+            browserVersion = ((RemoteWebDriver) driver).getCapabilities().getBrowserVersion();
+            browserName = ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
+            System.out.println("------ Browser Name: " + browserName + ", Version: " + browserVersion);
+        }
+    }
 }

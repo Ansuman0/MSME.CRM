@@ -2,7 +2,7 @@ package BusinessPartnerTest;
 
 import org.testng.annotations.Test;
 import dataGenrator.BusinessPartnerGenerator;
-import pageobjects.BusinessPartners;
+import pageobjects.BusinessPartnersPage;
 import pageobjects.HomePage;
 import utilities.BaseClass;
 
@@ -15,7 +15,7 @@ public class BusinessPartnerWithCustomer extends BaseClass {
 		HomePage hmPage = new HomePage(driver);
 		hmPage.clickOnbusinessPartnersLink();
 
-		BusinessPartners bpPage = new BusinessPartners(driver);
+		BusinessPartnersPage bpPage = new BusinessPartnersPage(driver);
 		bpPage.clickOnaddIcon();
 		bpPage.addBusinessPartnerWithCustomer(driver, BusinessPartnerGenerator.businessPartnerDetails);
 	}
