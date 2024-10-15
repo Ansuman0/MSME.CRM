@@ -19,6 +19,7 @@ public enum ConfigProperties {
 	LAMBDAURL,
 	PROJECT,
 	SELENIUMVERSION,
+	EMAILTESTREPORT,
 	PLATFORMNAME,
 	BROWSERVERSION,
 	/*Datbase & Metabase conig*/
