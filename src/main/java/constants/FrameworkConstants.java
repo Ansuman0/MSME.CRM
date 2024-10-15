@@ -17,6 +17,7 @@ public class FrameworkConstants {
 	private static final String EXCELPATH = RESOURCESPATH + "/excel/testdata.xlsx";
 	private static final String EXTENTREPORTFOLDERPATH = System.getProperty("user.dir") + "/extent-test-output/";
 	private static String extentReportFilePath = "";
+	private static final String EMAILFIGFILEPATH = STR."\{RESOURCESPATH}/configuration/configEmailReports.json";
 
 	/**
 	 * 
@@ -58,5 +59,7 @@ public class FrameworkConstants {
 	public static String getJsonconfigfilepath() {
 		return JSONCONFIGFILEPATH;
 	}
+
+	public static String getEmailfigfilepath(){ return EMAILFIGFILEPATH; }
 
 }

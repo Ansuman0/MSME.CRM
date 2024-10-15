@@ -1,6 +1,7 @@
 package utilities;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import constants.FrameworkConstants;
 import enums.ConfigProperties;
 import exceptions.PropertyFileUsageException;
-import lombok.experimental.UtilityClass;
+
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -20,7 +21,6 @@ public class JsonUtils {
 
 	private JsonUtils() {
 	}
-	
 
 	static {
 		try {
@@ -33,10 +33,10 @@ public class JsonUtils {
 		}
 	}
 
-	public static String get(ConfigProperties key) throws Exception {
+	public static String get(ConfigProperties key) throws FileNotFoundException {
 		if (Objects.isNull(key) || Objects.isNull(CONFIGMAP.get(key.name().toLowerCase()))) {
 			throw new PropertyFileUsageException(
-					"Property name " + key + " is not found. Please check config.Json File.");
+                    STR."Property name \{key} is not found. Please check config.Json File.");
 		}
 		return CONFIGMAP.get(key.name().toLowerCase());
 	}

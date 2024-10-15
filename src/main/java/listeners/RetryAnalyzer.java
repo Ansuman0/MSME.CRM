@@ -8,7 +8,7 @@ import utilities.PropertyUtils;
 /**
  * RetryAnalyzerImpl class implements {@link IRetryAnalyzer} to handle rerunning failed tests based on configuration.
  */
-public class RetryAnalyzerImpl implements IRetryAnalyzer {
+public class RetryAnalyzer implements IRetryAnalyzer {
 
     private int retryCount = 0;
     private static final int MAX_RETRY_COUNT = 3;
