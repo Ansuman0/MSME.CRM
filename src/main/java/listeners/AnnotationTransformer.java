@@ -24,7 +24,7 @@ public class AnnotationTransformer implements IAnnotationTransformer {
                           Constructor testConstructor, Method testMethod) {
         // Dynamically set retry analyzer for test methods
         if (annotation != null) {
-            annotation.setRetryAnalyzer(RetryAnalyzerImpl.class);
+            annotation.setRetryAnalyzer(RetryAnalyzer.class);
         }
     }
 }

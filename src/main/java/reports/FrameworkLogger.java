@@ -39,7 +39,7 @@ public final class FrameworkLogger {
             ExtentManager.getExtentTest().info("",
                     MediaEntityBuilder.createScreenCaptureFromBase64String(base64Image).build());
         } catch (Exception e) {
-            System.err.println("Failed to take screenshot: " + e.getMessage());
+            System.err.println(STR."Failed to take screenshot: \{e.getMessage()}");
         }
     };
 

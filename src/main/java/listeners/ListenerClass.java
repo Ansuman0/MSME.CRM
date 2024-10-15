@@ -82,10 +82,6 @@ public class ListenerClass implements ITestListener, ISuiteListener {
     public void onTestFailure(ITestResult result) {
         log(FAIL, result.getMethod().getMethodName() + " has failed");
         log(INFO, result.getThrowable().getMessage());
-
-        RetryAnalyzerImpl retryAnalyzer = new RetryAnalyzerImpl();
-        retryAnalyzer.retry(result);
-
         // ELKUtils.sendDetailsToElk(result.getMethod().getDescription(), "fail");
     }
 

@@ -1,5 +1,6 @@
 package utilities;
 
+import constants.FrameworkConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -66,6 +67,7 @@ public class BaseClass {
 
 	@AfterSuite(groups = { "SMOKE", "SANITY" })
 	public void asConfig() {
+		EmailUtility.sendReportEmail(FrameworkConstants.getExtentReportFilePath());
 		logger.info("====== DB Connection Closed ======");
 	}
 }
