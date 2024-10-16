@@ -1,5 +1,6 @@
 package utilities;
 
+import constants.FrameworkConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -7,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import driverFactories.Driver;
 import driverFactories.DriverFactory;
 import enums.ConfigProperties;
+import pageobjects.HomePage;
 import pageobjects.LoginPage;
 
 import org.testng.ITestContext;
@@ -53,21 +55,19 @@ public class BaseClass {
 
 	@AfterMethod(groups = { "SMOKE", "SANITY" })
 	public void amConfig() {
-		/*
-		 * HomePage hp = new HomePage(driver); hp.logOutOfApp(driver);
-		 */
+		HomePage hp = new HomePage(driver); hp.clickOnLogoutIconLink();
 		logger.info("====== Logout of App Successful ======");
 	}
 
 	@AfterClass(groups = { "SMOKE", "SANITY" })
 	public void acConfig() {
-		// driver.quit();
-		// Driver.quitDriver();
+		//Driver.quitDriver();
 		logger.info("====== Browser Closed ======");
 	}
 
 	@AfterSuite(groups = { "SMOKE", "SANITY" })
 	public void asConfig() {
+		EmailUtility.sendReportEmail(FrameworkConstants.getExtentReportFilePath());
 		logger.info("====== DB Connection Closed ======");
 	}
 }
