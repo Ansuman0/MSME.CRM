@@ -1,15 +1,19 @@
 {
   "mail": {
     "enabled": true,
-    "from": "your_email@yopmail.com",
-    "to": "recipient_email@yopmail.com",
-    "subject": "Test Report",
-    "body": "Please find the attached test report.",
     "smtp": {
       "host": "smtp.gmail.com",
       "port": 587,
-      "username": "ansuman",
-      "password": "your_password"
-    }
+      "username": "sing.ansuman07@gmail.com",
+      "password": "dymj fecj leel ltro"
+    },
+    "from": "sing.ansuman07@gmail.com",
+    "to": [
+      "garima.sanghai@gmail.com",
+      "ansuman07@hotmail.com"
+    ],
+
+    "subject": "Test Report",
+    "body": "Please find the attached report."
   }
 }
