@@ -1,10 +1,7 @@
 package utilities;
 
-//import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import constants.FrameworkConstants;
-import enums.ConfigProperties;
-
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.mail.*;
@@ -15,7 +12,6 @@ import java.util.Properties;
 
 public class EmailUtility {
 
-    private static final String EMAIL_ENABLED = "yes";  // Hardcoded value to enable/disable email sending
     private static EmailUtility config;
 
     public MailDetails mail;
@@ -51,7 +47,7 @@ public class EmailUtility {
 
     // Method to send an email with a report attachment
     public static void sendReportEmail(String reportPath) {
-        if (config != null && config.mail != null && isEmailEnabled()) {
+        if (config != null && config.mail != null) {
             try {
                 // Setup mail session dynamically based on the availability of username/password
                 Session session = setupMailSession();
@@ -66,12 +62,6 @@ public class EmailUtility {
         } else {
             System.err.println("Email sending is disabled or email configuration is not loaded.");
         }
-    }
-
-    // Check if the email functionality is enabled in the configuration
-    private static boolean isEmailEnabled() {
-        return config.mail.enabled && PropertyUtils.get(ConfigProperties.EMAILTESTREPORT)
-                .equalsIgnoreCase(EMAIL_ENABLED);
     }
 
     // Set-up the email session dynamically
