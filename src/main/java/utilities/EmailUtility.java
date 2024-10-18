@@ -2,34 +2,30 @@ package utilities;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import constants.FrameworkConstants;
-import enums.ConfigProperties;
-
-
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
-
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
 public class EmailUtility {
 
-    private static final String EMAIL_ENABLED = "yes";
     private static EmailUtility config;
 
     public MailDetails mail;
 
+    // Inner class to represent mail details
     public static class MailDetails {
-        public boolean enabled;
+        public boolean enabled;  // Added field to enable/disable email sending
         public Smtp smtp;
         public String from;
-        public String to;
+        public String[] to;  // Array for multiple recipients
         public String subject;
         public String body;
 
+        // SMTP details class
         public static class Smtp {
             public String host;
             public int port;
@@ -43,6 +39,7 @@ public class EmailUtility {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             config = objectMapper.readValue(new File(FrameworkConstants.getEmailfigfilepath()), EmailUtility.class);
+            System.out.println(STR."Email enabled: \{config.mail.enabled}");  // Debugging: log if enabled is loaded
         } catch (IOException e) {
             System.err.println(STR."Error loading configuration: \{e.getMessage()}");
         }
@@ -50,7 +47,7 @@ public class EmailUtility {
 
     // Method to send an email with a report attachment
     public static void sendReportEmail(String reportPath) {
-        if (config != null && config.mail != null && isEmailEnabled()) {
+        if (config != null && config.mail != null) {
             try {
                 // Setup mail session dynamically based on the availability of username/password
                 Session session = setupMailSession();
@@ -63,14 +60,8 @@ public class EmailUtility {
                 System.err.println(STR."Error while sending email: \{e.getMessage()}");
             }
         } else {
-            System.err.println(STR."Email sending is disabled or email configuration is not loaded.");
+            System.err.println("Email sending is disabled or email configuration is not loaded.");
         }
-    }
-
-    // Check if the email functionality is enabled in the configuration
-    private static boolean isEmailEnabled() {
-        return PropertyUtils.get(ConfigProperties.EMAILTESTREPORT)
-                .equalsIgnoreCase(EMAIL_ENABLED);
     }
 
     // Set-up the email session dynamically
@@ -78,7 +69,7 @@ public class EmailUtility {
         Properties properties = new Properties();
         properties.put("mail.smtp.host", config.mail.smtp.host);
         properties.put("mail.smtp.port", String.valueOf(config.mail.smtp.port));
-        properties.put("mail.smtp.starttls.enable", "true"); // Enable TLS by default
+        properties.put("mail.smtp.starttls.enable", "true");  // Enable TLS by default
 
         // Check if the SMTP configuration contains a username and password
         if (config.mail.smtp.username != null && !config.mail.smtp.username.isEmpty() &&
@@ -104,7 +95,12 @@ public class EmailUtility {
     private static MimeMessage createEmailMessage(Session session, String reportPath) throws MessagingException {
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(config.mail.from));
-        message.addRecipient(Message.RecipientType.TO, new InternetAddress(config.mail.to));
+
+        // Add multiple recipients
+        for (String recipient : config.mail.to) {
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+        }
+
         message.setSubject(config.mail.subject);
 
         // Create the body part

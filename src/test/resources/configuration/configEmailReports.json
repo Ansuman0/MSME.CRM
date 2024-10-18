@@ -1,15 +1,18 @@
 {
   "mail": {
     "enabled": true,
-    "from": "your_email@yopmail.com",
-    "to": "recipient_email@yopmail.com",
-    "subject": "Test Report",
-    "body": "Please find the attached test report.",
     "smtp": {
-      "host": "smtp.gmail.com",
+      "host": "smtp.example.com",
       "port": 587,
-      "username": "ansuman",
-      "password": "your_password"
-    }
+      "username": "example@example.com",
+      "password": ""
+    },
+    "from": "example@example.com",
+    "to": [
+      "example@example.com",
+      "example@example.com"
+    ],
+    "subject": "Test Report",
+    "body": "Please find the attached report."
   }
 }
