@@ -24,6 +24,5 @@ public class BusinessPartner extends BaseClass{
         BusinessPartnersPage bpPage = new BusinessPartnersPage(driver);
         bpPage.clickOnaddIcon();
         bpPage.addBusinessPartner(driver, BusinessPartnerGenerator.businessPartnerDetails);
-
     }
 }

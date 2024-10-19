@@ -72,7 +72,7 @@ public class ListenerClass implements ITestListener, ISuiteListener {
     @Override
     public void onTestSuccess(ITestResult result) {
         log(PASS, result.getMethod().getMethodName() + " is passed");
-        // ELKUtils.sendDetailsToElk(result.getMethod().getDescription(), "pass");
+        //ELKUtils.sendDetailsToElk(result.getMethod().getDescription(), "pass");
     }
 
     /**

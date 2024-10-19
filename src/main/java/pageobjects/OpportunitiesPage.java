@@ -63,9 +63,4 @@ public class OpportunitiesPage {
     private WebElement amountTxt;
 
 
-
-
-
-
-
 }
