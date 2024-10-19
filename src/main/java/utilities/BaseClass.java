@@ -67,7 +67,11 @@ public class BaseClass {
 
 	@AfterSuite(groups = { "SMOKE", "SANITY" })
 	public void asConfig() {
-		EmailUtility.sendReportEmail(FrameworkConstants.getExtentReportFilePath());
+
+		String emailtestreport = "yes"; // dynamically set to "yes" or "no"
+		if (emailtestreport.equalsIgnoreCase(PropertyUtils.get(ConfigProperties.EMAILTESTREPORT))) {
+				EmailUtility.sendReportEmail(FrameworkConstants.getExtentReportFilePath());
+			}
 		logger.info("====== DB Connection Closed ======");
 	}
 }

@@ -8,9 +8,9 @@ import java.util.Objects;
 import constants.FrameworkConstants;
 import enums.CategoryType;
 import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
+import exceptions.FrameworkException;
 
 /**
  * ExtentReport handles the initialization, creation, and flushing of
@@ -55,7 +55,7 @@ public final class ExtentReport {
     private static void configureSparkReporter(ExtentSparkReporter spark) {
         spark.config().setTheme(Theme.STANDARD);
         spark.config().setDocumentTitle("Automation Reports");
-        spark.config().setReportName("Vitiger Application");
+        spark.config().setReportName("MSME.CRM");
     }
 
     /**
@@ -73,12 +73,11 @@ public final class ExtentReport {
     /**
      * Opens the generated report in the default web browser.
      */
-    private static void openReportInBrowser() {
+    private static void openReportInBrowser() throws FrameworkException {
         try {
             Desktop.getDesktop().browse(new File(FrameworkConstants.getExtentReportFilePath()).toURI());
         } catch (IOException e) {
-            // Handle exception appropriately (e.g., logging)
-            e.printStackTrace();
+            throw new FrameworkException("Failed to open the report in browser.", e);
         }
     }
 
