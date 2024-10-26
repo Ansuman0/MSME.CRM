@@ -2,11 +2,8 @@ package driverFactories;
 
 import java.net.MalformedURLException;
 import java.util.Objects;
-
 import org.openqa.selenium.WebDriver;
-
 import enums.ConfigProperties;
-import driverFactories.DriverFactory;
 import utilities.PropertyUtils;
 
 
