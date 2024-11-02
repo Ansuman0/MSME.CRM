@@ -29,16 +29,10 @@ public class BaseClass {
 	}
 
 	@BeforeClass(alwaysRun = true)
-	@Parameters("xmlbrowser")
-	public void bcConfig(@Optional String xmlbrowser, ITestContext context) throws Exception {
-
-		if (xmlbrowser != null) {
-			driver = Driver.initDriver(xmlbrowser, DriverFactory.browserVersion);
-		} else {
-			String browser = PropertyUtils.get(ConfigProperties.BROWSER);
-			driver = Driver.initDriver(browser, DriverFactory.browserVersion);
-		}
-
+	@Parameters({"xmlbrowser", "author"})
+	public void bcConfig(@Optional String xmlbrowser, @Optional String author, ITestContext context) throws Exception {
+		String browser = (xmlbrowser != null) ? xmlbrowser : PropertyUtils.get(ConfigProperties.BROWSER);
+		driver = Driver.initDriver(browser, DriverFactory.browserVersion);
 	}
 
 	@BeforeMethod(groups = { "SMOKE", "SANITY" })
@@ -61,7 +55,7 @@ public class BaseClass {
 
 	@AfterClass(groups = { "SMOKE", "SANITY" })
 	public void acConfig() {
-		//Driver.quitDriver();
+		Driver.quitDriver();
 		logger.info("====== Browser Closed ======");
 	}
 

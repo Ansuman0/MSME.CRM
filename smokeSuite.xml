@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="smokeSuite">
+
+    <listeners>
+        <listener class-name="listeners.ListenerClass" />
+    </listeners>
+    <test verbose="2" thread-count="5" preserve-order="true" name="Test">
+        <parameter name="xmlbrowser" value="Edge"></parameter>
+        <parameter name="author" value="Ansuman" />
+        <classes>
+            <class name="BusinessPartnerTest.BusinessPartnerWithCustomer">
+            <methods><include name="addBusinessPartnerWithCustomer"/></methods></class>
+
+           <!-- <class name="BusinessPartnerTest.BusinessPartnerWithVendor">
+            <methods><include name="addBusinessPartnerWithVendor"/></methods></class> !-->
+
+        </classes>
+    </test>
+</suite>
