@@ -10,6 +10,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.PageLoadStrategy;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.safari.SafariOptions;
 import org.testng.annotations.Parameters;
 
 import enums.ConfigProperties;
@@ -46,8 +48,11 @@ public final class DriverFactory {
             case "lambdatest":
                 driver = createLambdaTestDriver(browser);
                 break;
+            case "browserstack":
+                driver = createBrowserStackDriver(browser);
+                break;
             default:
-                throw new IllegalArgumentException("Unsupported run mode: " + runMode);
+                throw new IllegalArgumentException(String.format("Unsupported run mode: %s", runMode));
         }
 
         setBrowserDetails(driver);
@@ -73,8 +78,13 @@ public final class DriverFactory {
                 EdgeOptions edgeOptions = new EdgeOptions();
                 setCommonOptions(edgeOptions);
                 return new EdgeDriver(edgeOptions);
+            case "safari":
+                driverManager = WebDriverManager.safaridriver();
+                SafariOptions safariOptions = new SafariOptions();
+                setCommonOptions(safariOptions);
+                return new SafariDriver(safariOptions);
             default:
-                throw new IllegalArgumentException("Unsupported browser: " + browser);
+                throw new IllegalArgumentException(String.format("Unsupported browser: %s", browser));
         }
     }
 
@@ -86,8 +96,10 @@ public final class DriverFactory {
                 return new FirefoxOptions();
             case "edge":
                 return new EdgeOptions();
+            case "safari":
+                return new SafariOptions();
             default:
-                throw new IllegalArgumentException("Unsupported browser: " + browser);
+                throw new IllegalArgumentException(String.format("Unsupported browser: %s", browser));
         }
     }
 
@@ -123,6 +135,24 @@ public final class DriverFactory {
             throw new DriverCreationException("Failed to create LambdaTest WebDriver", e);
         }
     }
+    private static WebDriver createBrowserStackDriver(String browser) throws Exception {
+        MutableCapabilities browserOptions = getBrowserOptions(browser);
+
+        // Add BrowserStack specific capabilities
+        HashMap<String, Object> bsOptions = new HashMap<>();
+        bsOptions.put("userName", JsonUtils.get(ConfigProperties.USERNAME));
+        bsOptions.put("accessKey", JsonUtils.get(ConfigProperties.ACCESSKEY));
+        bsOptions.put("projectName", JsonUtils.get(ConfigProperties.PROJECT));
+        browserOptions.setCapability("bstack:options", bsOptions);
+
+        try {
+            URI browserStackUri = new URI(JsonUtils.get(ConfigProperties.BROWSERSTACKURL));
+            URL browserStackUrl = browserStackUri.toURL();
+            return new RemoteWebDriver(browserStackUrl, browserOptions);
+        } catch (Exception e) {
+            throw new DriverCreationException("Failed to create BrowserStack WebDriver", e);
+        }
+    }
 
     private static void setCommonOptions(MutableCapabilities options) {
         options.setCapability("acceptInsecureCerts", true);
@@ -132,14 +162,18 @@ public final class DriverFactory {
             ((ChromeOptions) options).addArguments("--incognito", "--start-maximized");
         } else if (options instanceof EdgeOptions) {
             ((EdgeOptions) options).addArguments("--start-maximized");
+        } else if (options instanceof SafariOptions) {
+            options.setCapability("safari.cleanSession", true);
+            options.setCapability("safari.defaultWindowFeatures", true); // Example of another capability for Safari
         }
     }
 
     private static void setBrowserDetails(WebDriver driver) {
         if (driver instanceof RemoteWebDriver) {
-            browserVersion = ((RemoteWebDriver) driver).getCapabilities().getBrowserVersion();
-            browserName = ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
-            System.out.println("------ Browser Name: " + browserName + ", Version: " + browserVersion);
+            var capabilities = ((RemoteWebDriver) driver).getCapabilities();
+            browserVersion = capabilities.getBrowserVersion() != null ? capabilities.getBrowserVersion() : "Unknown Version";
+            browserName = capabilities.getBrowserName() != null ? capabilities.getBrowserName() : "Unknown Browser";
+            System.out.println(STR."------ Browser Name: \{browserName}, Version: \{browserVersion}");
         }
     }
 }
