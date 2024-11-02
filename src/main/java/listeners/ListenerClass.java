@@ -53,7 +53,7 @@ public class ListenerClass implements ITestListener, ISuiteListener {
 
         FrameworkAnnotation annotation = result.getMethod().getConstructorOrMethod().getMethod().getAnnotation(FrameworkAnnotation.class);
         String os = System.getProperty("os.name");
-        String device = String.format("%s -- %s-%s", os, DriverFactory.browserName, DriverFactory.browserVersion);
+        String device = String.format("%s -- %s-%s", os, DriverFactory.getBrowserName(), DriverFactory.getBrowserVersion());
 
         if (annotation != null) {
             ExtentReport.addAuthors(annotation.author());

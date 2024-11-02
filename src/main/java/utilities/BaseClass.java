@@ -32,7 +32,7 @@ public class BaseClass {
 	@Parameters({"xmlbrowser", "author"})
 	public void bcConfig(@Optional String xmlbrowser, @Optional String author, ITestContext context) throws Exception {
 		String browser = (xmlbrowser != null) ? xmlbrowser : PropertyUtils.get(ConfigProperties.BROWSER);
-		driver = Driver.initDriver(browser, DriverFactory.browserVersion);
+		driver = Driver.initDriver(browser, DriverFactory.getBrowserVersion());
 	}
 
 	@BeforeMethod(groups = { "SMOKE", "SANITY" })
