@@ -521,6 +521,7 @@ public class BusinessPartnersPage {
 		saveBtn.click();
 
 	}
+
 	public void addBusinessPartner(WebDriver driver, Map<String, String> businessPartnerDetails)
 			throws ParseException {
 
@@ -667,7 +668,6 @@ public class BusinessPartnersPage {
 
 		// Save
 		saveBtn.click();
-
 	}
 
 
