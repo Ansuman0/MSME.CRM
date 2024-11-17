@@ -30,7 +30,7 @@ public final class FrameworkLogger {
     private static final Consumer<String> SKIP = message -> ExtentManager.getExtentTest().skip(message);
     private static final Consumer<String> INFO = message -> ExtentManager.getExtentTest().info(message);
     private static final Consumer<String> WARNING = message -> ExtentManager.getExtentTest().warning(message);
-    private static final Consumer<String> CONSOLE = message -> System.out.println(STR."INFO---->\{message}");
+    private static final Consumer<String> CONSOLE = message -> System.out.println(String.format("INFO---->%s", message));
 
     private static final Consumer<String> EXTENT_AND_CONSOLE = PASS.andThen(CONSOLE);
 
@@ -83,7 +83,6 @@ public final class FrameworkLogger {
         Consumer<String> logAction = shouldTakeScreenshots
                 ? SCREENSHOT_MAP.getOrDefault(status, EXTENT_AND_CONSOLE)
                 : LOG_MAP.getOrDefault(status, EXTENT_AND_CONSOLE);
-
         logAction.accept(message);
     }
 }

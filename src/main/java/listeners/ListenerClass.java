@@ -106,6 +106,7 @@ public class ListenerClass implements ITestListener, ISuiteListener {
 
         // Log the partially successful test
         log(WARNING, message);
+        log(INFO, result.getThrowable().getMessage());
 
         // Optionally, add to Extend Report or other report types if desired
         ExtentReport.createTest(methodName.isEmpty() ? result.getMethod().getMethodName() : methodName);
