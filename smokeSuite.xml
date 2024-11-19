@@ -9,7 +9,7 @@
     <parameter name="xmlbrowser" value="Edge"></parameter>
         <parameter name="author" value="Ansuman" />
         <classes>
-            <class name="BusinessPartnerTest.BusinessPartnerWithCustomer">
+            <class name="BusinessPartnerTest.BusinessPartnerWithCustomerTest">
             <methods>
                 <include name="addBusinessPartnerWithCustomer"/>
             </methods></class>
