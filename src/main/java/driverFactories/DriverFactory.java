@@ -1,6 +1,6 @@
 package driverFactories;
 
-import exceptions.DriverCreationException; // Import your custom exception
+import exceptions.DriverCreationException; //custom exception
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -10,6 +10,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.PageLoadStrategy;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.safari.SafariOptions;
 import org.testng.annotations.Parameters;
 
 import enums.ConfigProperties;
@@ -17,6 +19,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import utilities.JsonUtils;
 import utilities.PropertyUtils;
 
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
@@ -27,71 +30,77 @@ public final class DriverFactory {
     private DriverFactory() {
     }
 
-    public static String browserVersion = "";
-    public static String browserName = "";
+    private static String browserVersion = "";
+    private static String browserName = "";
     static WebDriverManager driverManager;
 
     @Parameters("browser")
-    public static WebDriver getDriver(String browser, String version) throws Exception {
+    public static WebDriver getDriver(final String browser, final String version) throws DriverCreationException {
         WebDriver driver;
-        String runMode = PropertyUtils.get(ConfigProperties.RUNMODE);
+        final String runMode = PropertyUtils.get(ConfigProperties.RUNMODE);
 
-        switch (runMode.toLowerCase()) {
-            case "local":
-                driver = createLocalDriver(browser);
-                break;
-            case "remote":
-                driver = createRemoteDriver(getBrowserOptions(browser));
-                break;
-            case "lambdatest":
-                driver = createLambdaTestDriver(browser);
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported run mode: " + runMode);
+        try {
+            switch (runMode.toLowerCase()) {
+                case "local" -> driver = createLocalDriver(browser);
+                case "remote" -> driver = createRemoteDriver(getBrowserOptions(browser));
+                case "lambdatest" -> driver = createLambdaTestDriver(browser);
+                case "browserstack" -> driver = createBrowserStackDriver(browser);
+                default -> throw new IllegalArgumentException(String.format("Unsupported run mode: %s", runMode));
+            }
+        } catch (FileNotFoundException e) {
+            throw new DriverCreationException("Configuration file not found for driver setup", e);
+        } catch (IllegalArgumentException e) {
+            throw new DriverCreationException("Invalid browser or run mode specified", e);
+        } catch (Exception e) {
+            throw new DriverCreationException("Unexpected error during WebDriver creation", e);
         }
 
         setBrowserDetails(driver);
         return driver;
     }
 
-    private static WebDriver createLocalDriver(String browser) {
+    private static WebDriver createLocalDriver(final String browser) {
 
         switch (browser.toLowerCase()) {
-
-            case "chrome":
+            case "chrome" -> {
                 driverManager = WebDriverManager.chromedriver();
                 ChromeOptions chromeOptions = new ChromeOptions();
                 setCommonOptions(chromeOptions);
                 return new ChromeDriver(chromeOptions);
-            case "firefox":
+            }
+            case "firefox" -> {
                 driverManager = WebDriverManager.firefoxdriver();
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
                 setCommonOptions(firefoxOptions);
                 return new FirefoxDriver(firefoxOptions);
-            case "edge":
+            }
+            case "edge" -> {
                 driverManager = WebDriverManager.edgedriver();
                 EdgeOptions edgeOptions = new EdgeOptions();
                 setCommonOptions(edgeOptions);
                 return new EdgeDriver(edgeOptions);
-            default:
-                throw new IllegalArgumentException("Unsupported browser: " + browser);
+            }
+            case "safari" -> {
+                driverManager = WebDriverManager.safaridriver();
+                SafariOptions safariOptions = new SafariOptions();
+                setCommonOptions(safariOptions);
+                return new SafariDriver(safariOptions);
+            }
+            default -> throw new IllegalArgumentException(String.format("Unsupported browser: %s", browser));
         }
     }
 
-    private static MutableCapabilities getBrowserOptions(String browser) {
-        switch (browser.toLowerCase()) {
-            case "chrome":
-                return new ChromeOptions();
-            case "firefox":
-                return new FirefoxOptions();
-            case "edge":
-                return new EdgeOptions();
-            default:
-                throw new IllegalArgumentException("Unsupported browser: " + browser);
-        }
+    private static MutableCapabilities getBrowserOptions(final String browser) {
+        return switch (browser.toLowerCase()) {
+            case "chrome" -> new ChromeOptions();
+            case "firefox" -> new FirefoxOptions();
+            case "edge" -> new EdgeOptions();
+            case "safari" -> new SafariOptions();
+            default -> throw new IllegalArgumentException(String.format("Unsupported browser: %s", browser));
+        };
     }
 
-    private static WebDriver createRemoteDriver(MutableCapabilities options) throws DriverCreationException {
+    private static WebDriver createRemoteDriver(final MutableCapabilities options) throws DriverCreationException {
         try {
             setCommonOptions(options);
             URI seleniumGridUri = new URI(JsonUtils.get(ConfigProperties.SELENIUMGRIDURL));
@@ -102,7 +111,7 @@ public final class DriverFactory {
         }
     }
 
-    private static WebDriver createLambdaTestDriver(String browser) throws Exception {
+    private static WebDriver createLambdaTestDriver(final String browser) throws FileNotFoundException, DriverCreationException {
         MutableCapabilities browserOptions = getBrowserOptions(browser);
 
         // Add LambdaTest specific capabilities
@@ -124,22 +133,58 @@ public final class DriverFactory {
         }
     }
 
-    private static void setCommonOptions(MutableCapabilities options) {
-        options.setCapability("acceptInsecureCerts", true);
-        options.setCapability("pageLoadStrategy", PageLoadStrategy.EAGER);
+    private static WebDriver createBrowserStackDriver(final String browser) throws DriverCreationException, FileNotFoundException {
+        MutableCapabilities browserOptions = getBrowserOptions(browser);
 
-        if (options instanceof ChromeOptions || options instanceof FirefoxOptions) {
-            ((ChromeOptions) options).addArguments("--incognito", "--start-maximized");
-        } else if (options instanceof EdgeOptions) {
-            ((EdgeOptions) options).addArguments("--start-maximized");
+        // Add BrowserStack specific capabilities
+        HashMap<String, Object> bsOptions = new HashMap<>();
+        bsOptions.put("userName", JsonUtils.get(ConfigProperties.USERNAME));
+        bsOptions.put("accessKey", JsonUtils.get(ConfigProperties.ACCESSKEY));
+        bsOptions.put("projectName", JsonUtils.get(ConfigProperties.PROJECT));
+        browserOptions.setCapability("bstack:options", bsOptions);
+
+        try {
+            URI browserStackUri = new URI(JsonUtils.get(ConfigProperties.BROWSERSTACKURL));
+            URL browserStackUrl = browserStackUri.toURL();
+            return new RemoteWebDriver(browserStackUrl, browserOptions);
+        } catch (Exception e) {
+            throw new DriverCreationException("Failed to create BrowserStack WebDriver", e);
         }
     }
 
-    private static void setBrowserDetails(WebDriver driver) {
-        if (driver instanceof RemoteWebDriver) {
-            browserVersion = ((RemoteWebDriver) driver).getCapabilities().getBrowserVersion();
-            browserName = ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
-            System.out.println("------ Browser Name: " + browserName + ", Version: " + browserVersion);
+    private static void setCommonOptions(final MutableCapabilities options) {
+        options.setCapability("acceptInsecureCerts", true);
+        options.setCapability("pageLoadStrategy", PageLoadStrategy.EAGER);
+
+        switch (options) {
+            case ChromeOptions chromeOptions -> chromeOptions.addArguments("--incognito", "--start-maximized");
+            case FirefoxOptions firefoxOptions -> firefoxOptions.addArguments("--incognito", "--start-maximized");
+            case EdgeOptions edgeOptions -> edgeOptions.addArguments("--start-maximized");
+            case SafariOptions safariOptions -> {
+                safariOptions.setCapability("safari.cleanSession", true);
+                safariOptions.setCapability("safari.defaultWindowFeatures", true);
+            }
+            default -> throw new IllegalArgumentException(
+                    String.format("Unsupported options type: %s", options.getClass().getSimpleName())
+            );
         }
+    }
+
+    private static void setBrowserDetails(final WebDriver driver) {
+        if (driver instanceof RemoteWebDriver remoteDriver) {
+            var capabilities = remoteDriver.getCapabilities();
+            browserVersion = (capabilities.getBrowserVersion() != null) ? capabilities.getBrowserVersion() : "Unknown Version";
+            browserName = (capabilities.getBrowserName() != null) ? capabilities.getBrowserName() : "Unknown Browser";
+            System.out.printf("------ Browser Name: %s, Version: %s%n", browserName, browserVersion);
+        }
+    }
+
+    // Getter methods for browser details
+    public static String getBrowserVersion() {
+        return browserVersion;
+    }
+
+    public static String getBrowserName() {
+        return browserName;
     }
 }

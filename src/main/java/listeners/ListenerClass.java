@@ -31,7 +31,7 @@ public class ListenerClass implements ITestListener, ISuiteListener {
         try {
             ExtentReport.initReports();
         } catch (Exception e) {
-            log(FAIL, "Exception occurred during report initialization: " + e.getMessage());
+            log(FAIL, String.format("Exception occurred during report initialization: %s", e.getMessage()));
         }
     }
 
@@ -53,7 +53,7 @@ public class ListenerClass implements ITestListener, ISuiteListener {
 
         FrameworkAnnotation annotation = result.getMethod().getConstructorOrMethod().getMethod().getAnnotation(FrameworkAnnotation.class);
         String os = System.getProperty("os.name");
-        String device = os + "--" + DriverFactory.browserName + "-" + DriverFactory.browserVersion;
+        String device = String.format("%s -- %s-%s", os, DriverFactory.getBrowserName(), DriverFactory.getBrowserVersion());
 
         if (annotation != null) {
             ExtentReport.addAuthors(annotation.author());
@@ -71,8 +71,9 @@ public class ListenerClass implements ITestListener, ISuiteListener {
      */
     @Override
     public void onTestSuccess(ITestResult result) {
-        log(PASS, result.getMethod().getMethodName() + " is passed");
-        // ELKUtils.sendDetailsToElk(result.getMethod().getDescription(), "pass");
+      //  log(PASS, result.getMethod().getMethodName() + " is passed");
+        log(PASS, String.format("%s is passed", result.getMethod().getMethodName()));
+        //ELKUtils.sendDetailsToElk(result.getMethod().getDescription(), "pass");
     }
 
     /**
@@ -80,7 +81,8 @@ public class ListenerClass implements ITestListener, ISuiteListener {
      */
     @Override
     public void onTestFailure(ITestResult result) {
-        log(FAIL, result.getMethod().getMethodName() + " has failed");
+       //log(FAIL, result.getMethod().getMethodName() + " has failed");
+        log(FAIL, String.format("%s has failed", result.getMethod().getMethodName()));
         log(INFO, result.getThrowable().getMessage());
         // ELKUtils.sendDetailsToElk(result.getMethod().getDescription(), "fail");
     }
@@ -90,14 +92,24 @@ public class ListenerClass implements ITestListener, ISuiteListener {
      */
     @Override
     public void onTestSkipped(ITestResult result) {
-        log(SKIP, result.getMethod().getMethodName() + " is skipped");
+        //log(SKIP, result.getMethod().getMethodName() + " is skipped");
+        log(SKIP, String.format("%s is skipped", result.getMethod().getMethodName()));
         log(INFO, result.getThrowable().getMessage());
         // ELKUtils.sendDetailsToElk(result.getMethod().getDescription(), "skip");
     }
 
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-        // No implementation required for this at the moment
+        String methodName = result.getMethod().getMethodName();
+        int successPercentage = result.getMethod().getSuccessPercentage();
+        String message = String.format("Test %s failed but met the success percentage requirement (%d%%)", methodName, successPercentage);
+
+        // Log the partially successful test
+        log(WARNING, message);
+        log(INFO, result.getThrowable().getMessage());
+
+        // Optionally, add to Extend Report or other report types if desired
+        ExtentReport.createTest(methodName.isEmpty() ? result.getMethod().getMethodName() : methodName);
     }
 
     @Override

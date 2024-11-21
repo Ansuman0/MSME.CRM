@@ -30,7 +30,8 @@ public final class FrameworkLogger {
     private static final Consumer<String> SKIP = message -> ExtentManager.getExtentTest().skip(message);
     private static final Consumer<String> INFO = message -> ExtentManager.getExtentTest().info(message);
     private static final Consumer<String> WARNING = message -> ExtentManager.getExtentTest().warning(message);
-    private static final Consumer<String> CONSOLE = message -> System.out.println("INFO---->" + message);
+    private static final Consumer<String> CONSOLE = message -> System.out.println(String.format("INFO---->%s", message));
+
     private static final Consumer<String> EXTENT_AND_CONSOLE = PASS.andThen(CONSOLE);
 
     private static final Consumer<String> TAKE_SCREENSHOT = message -> {
@@ -39,7 +40,7 @@ public final class FrameworkLogger {
             ExtentManager.getExtentTest().info("",
                     MediaEntityBuilder.createScreenCaptureFromBase64String(base64Image).build());
         } catch (Exception e) {
-            System.err.println(STR."Failed to take screenshot: \{e.getMessage()}");
+            System.err.printf("Failed to take screenshot: %s%n", e.getMessage());
         }
     };
 
@@ -82,7 +83,6 @@ public final class FrameworkLogger {
         Consumer<String> logAction = shouldTakeScreenshots
                 ? SCREENSHOT_MAP.getOrDefault(status, EXTENT_AND_CONSOLE)
                 : LOG_MAP.getOrDefault(status, EXTENT_AND_CONSOLE);
-
         logAction.accept(message);
     }
 }

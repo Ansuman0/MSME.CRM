@@ -8,7 +8,7 @@ import utilities.BaseClass;
 
 import java.text.ParseException;
 
-public class BusinessPartnerWithCustomer extends BaseClass {
+public class BusinessPartnerWithCustomerTest extends BaseClass {
 
 	@Test
 	public void addBusinessPartnerWithCustomer() throws ParseException {

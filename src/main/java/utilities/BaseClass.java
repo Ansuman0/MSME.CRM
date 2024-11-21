@@ -13,11 +13,12 @@ import pageobjects.LoginPage;
 
 import org.testng.ITestContext;
 import org.testng.annotations.*;
+import static enums.LogType.CONSOLE;
+import static reports.FrameworkLogger.log;
 
 public class BaseClass {
 
 	protected WebDriver driver = null;
-	private static final Logger logger = LogManager.getLogger(BaseClass.class);
 
 	public WebDriver getDriver() {
 		return driver;
@@ -25,20 +26,15 @@ public class BaseClass {
 
 	@BeforeSuite(groups = { "SMOKE", "SANITY" })
 	public void bsConfig() {
-		logger.info("====== DB Connection Successful ======");
+		log(CONSOLE, String.format("====== DB Connection Successful ======"));
+		//log(info("====== DB Connection Successful ======"));
 	}
 
 	@BeforeClass(alwaysRun = true)
-	@Parameters("xmlbrowser")
-	public void bcConfig(@Optional String xmlbrowser, ITestContext context) throws Exception {
-
-		if (xmlbrowser != null) {
-			driver = Driver.initDriver(xmlbrowser, DriverFactory.browserVersion);
-		} else {
-			String browser = PropertyUtils.get(ConfigProperties.BROWSER);
-			driver = Driver.initDriver(browser, DriverFactory.browserVersion);
-		}
-
+	@Parameters({"xmlbrowser", "author"})
+	public void bcConfig(@Optional String xmlbrowser, @Optional String author, ITestContext context) throws Exception {
+		String browser = (xmlbrowser != null) ? xmlbrowser : PropertyUtils.get(ConfigProperties.BROWSER);
+		driver = Driver.initDriver(browser, DriverFactory.getBrowserVersion());
 	}
 
 	@BeforeMethod(groups = { "SMOKE", "SANITY" })
@@ -50,19 +46,19 @@ public class BaseClass {
 		LoginPage lp = new LoginPage(driver);
 		lp.loginToApp(tenantname, username, password);
 
-		logger.info("====== Login to App Successful ======");
+		log(CONSOLE, String.format("====== Login to App Successful ======"));
 	}
 
 	@AfterMethod(groups = { "SMOKE", "SANITY" })
 	public void amConfig() {
 		HomePage hp = new HomePage(driver); hp.clickOnLogoutIconLink();
-		logger.info("====== Logout of App Successful ======");
+		log(CONSOLE, String.format("====== Logout of App Successful ======"));
 	}
 
 	@AfterClass(groups = { "SMOKE", "SANITY" })
 	public void acConfig() {
-		//Driver.quitDriver();
-		logger.info("====== Browser Closed ======");
+		Driver.quitDriver();
+		log(CONSOLE, String.format("====== Browser Closed ======"));
 	}
 
 	@AfterSuite(groups = { "SMOKE", "SANITY" })
@@ -72,6 +68,6 @@ public class BaseClass {
 		if (emailtestreport.equalsIgnoreCase(PropertyUtils.get(ConfigProperties.EMAILTESTREPORT))) {
 				EmailUtility.sendReportEmail(FrameworkConstants.getExtentReportFilePath());
 			}
-		logger.info("====== DB Connection Closed ======");
+		log(CONSOLE, String.format("====== DB Connection Closed ======"));
 	}
 }
