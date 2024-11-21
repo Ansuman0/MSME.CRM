@@ -13,10 +13,11 @@ public class FrameworkConstants {
 	private static final int EXPLICITWAIT = 10;
 	private static final String RESOURCESPATH = System.getProperty("user.dir") + "/src/test/resources";
 	private static final String CONFIGFILEPATH = RESOURCESPATH + "/configuration/config.properties";
-	private static final String JSONCONFIGFILEPATH = RESOURCESPATH + "/config/config.json";
+	private static final String JSONCONFIGFILEPATH = RESOURCESPATH + "/configuration/lambadaTestConfig.json";
 	private static final String EXCELPATH = RESOURCESPATH + "/excel/testdata.xlsx";
 	private static final String EXTENTREPORTFOLDERPATH = System.getProperty("user.dir") + "/extent-test-output/";
 	private static String extentReportFilePath = "";
+	private static final String EMAILFIGFILEPATH = STR."\{RESOURCESPATH}/configuration/configEmailReports.json";
 
 	/**
 	 * 
@@ -58,5 +59,7 @@ public class FrameworkConstants {
 	public static String getJsonconfigfilepath() {
 		return JSONCONFIGFILEPATH;
 	}
+
+	public static String getEmailfigfilepath(){ return EMAILFIGFILEPATH; }
 
 }

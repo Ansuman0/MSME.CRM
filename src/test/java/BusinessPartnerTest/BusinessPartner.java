@@ -1,21 +1,27 @@
 package BusinessPartnerTest;
 
+import annotation.FrameworkAnnotation;
 import dataGenrator.BusinessPartnerGenerator;
+import enums.CategoryType;
+import listeners.ListenerClass;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import pageobjects.BusinessPartners;
+import pageobjects.BusinessPartnersPage;
 import pageobjects.HomePage;
 import utilities.BaseClass;
 
 import java.text.ParseException;
 
-public class BusinessPartner extends BaseClass {
+@Listeners({ListenerClass.class})
+public class BusinessPartner extends BaseClass{
 
-    @Test
+    @FrameworkAnnotation(author = {"Ansuman"}, category = {CategoryType.SMOKE})
+    @Test(groups = {"SMOKE", "SANITY"},retryAnalyzer = listeners.RetryAnalyzer.class)
     public void addBusinessPartner() throws ParseException {
         HomePage hmPage = new HomePage(driver);
         hmPage.clickOnbusinessPartnersLink();
 
-        BusinessPartners bpPage = new BusinessPartners(driver);
+        BusinessPartnersPage bpPage = new BusinessPartnersPage(driver);
         bpPage.clickOnaddIcon();
         bpPage.addBusinessPartner(driver, BusinessPartnerGenerator.businessPartnerDetails);
     }

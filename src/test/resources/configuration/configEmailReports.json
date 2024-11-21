@@ -1,0 +1,18 @@
+{
+  "mail": {
+    "enabled": true,
+    "smtp": {
+      "host": "smtp.example.com",
+      "port": 587,
+      "username": "example@example.com",
+      "password": ""
+    },
+    "from": "example@example.com",
+    "to": [
+      "example@example.com",
+      "example@example.com"
+    ],
+    "subject": "Test Report",
+    "body": "Please find the attached report."
+  }
+}

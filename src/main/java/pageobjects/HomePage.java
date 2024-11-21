@@ -34,6 +34,18 @@ public class HomePage {
 	@FindBy(xpath = "//aside//li[contains(@id, 'myQuotations')]")
 	private WebElement myQuotationsIcon;
 
+	@FindBy(xpath = "//div[@class='dropdown dropdown-end']")
+	private WebElement dropdownlogoutIcon;
+
+	@FindBy(css = ".animate-spin")
+	private WebElement dropdownSpinner;
+
+	@FindBy(css = ".k-loading-image")
+	private WebElement kenduGridLoader;
+
+	@FindBy(xpath = "//span[@class='icon md log-out']")
+	private WebElement logoutButton;
+
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
 		wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -75,6 +87,19 @@ public class HomePage {
 	public void clickOnMyQuotationsIconLink() {
 		verifySideMenuGetLoaded();
 		wait.until(ExpectedConditions.elementToBeClickable(myQuotationsIcon)).click();
+	}
+
+	public void formdropdownLoader(){
+		wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+		wait.until(ExpectedConditions.invisibilityOfAllElements(dropdownSpinner));
+	}
+
+	public void clickOnLogoutIconLink(){
+		driver.navigate().refresh();
+		wait.until(ExpectedConditions.invisibilityOf(kenduGridLoader));
+		formdropdownLoader();
+		wait.until(ExpectedConditions.elementToBeClickable(dropdownlogoutIcon)).click();
+		wait.until(ExpectedConditions.elementToBeClickable(logoutButton)).click();
 	}
 
 }
