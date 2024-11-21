@@ -15,7 +15,7 @@ import java.text.ParseException;
 @Listeners({ListenerClass.class})
 public class BusinessPartner extends BaseClass{
 
-   //@FrameworkAnnotation(author = {"Ansuman"}, category = {CategoryType.SMOKE, CategoryType.SANITY})
+    @FrameworkAnnotation(author = {"Ansuman"}, category = {CategoryType.SMOKE})
     @Test(groups = {"SMOKE", "SANITY"},retryAnalyzer = listeners.RetryAnalyzer.class)
     public void addBusinessPartner() throws ParseException {
         HomePage hmPage = new HomePage(driver);

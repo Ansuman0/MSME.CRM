@@ -14,6 +14,11 @@
                 <include name="addBusinessPartnerWithCustomer"/>
             </methods></class>
 
+            <class name="BusinessPartnerTest.BusinessPartnerWithVendor">
+                <methods>
+                    <include name="addBusinessPartnerWithVendor"/>
+                </methods></class>
+
            <!-- <class name="BusinessPartnerTest.BusinessPartnerWithVendor">
             <methods><include name="addBusinessPartnerWithVendor"/></methods></class> !-->
         </classes>
