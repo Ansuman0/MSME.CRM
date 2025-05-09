@@ -96,7 +96,7 @@ public final class DriverFactory {
             case "firefox" -> new FirefoxOptions();
             case "edge" -> new EdgeOptions();
             case "safari" -> new SafariOptions();
-            default -> throw new IllegalArgumentException(String.format("Unsupported browser: %s", browser));
+            default -> throw new IllegalArgumentException(String.format("Unsupported browser options: %s", browser));
         };
     }
 
@@ -157,9 +157,9 @@ public final class DriverFactory {
         options.setCapability("pageLoadStrategy", PageLoadStrategy.EAGER);
 
         switch (options) {
-            case ChromeOptions chromeOptions -> chromeOptions.addArguments("--incognito", "--start-maximized");
+            case ChromeOptions chromeOptions -> chromeOptions.addArguments("--incognito", "--start-maximized", "--disable-gpu");
             case FirefoxOptions firefoxOptions -> firefoxOptions.addArguments("--incognito", "--start-maximized");
-            case EdgeOptions edgeOptions -> edgeOptions.addArguments("--start-maximized");
+            case EdgeOptions edgeOptions -> edgeOptions.addArguments("--start-maximized", "--headless", "--disable-gpu","--headless=new","--disable-dev-shm-usage","--no-sandbox");
             case SafariOptions safariOptions -> {
                 safariOptions.setCapability("safari.cleanSession", true);
                 safariOptions.setCapability("safari.defaultWindowFeatures", true);
@@ -177,7 +177,7 @@ public final class DriverFactory {
             browserName = (capabilities.getBrowserName() != null) ? capabilities.getBrowserName() : "Unknown Browser";
             System.out.printf("------ Browser Name: %s, Version: %s%n", browserName, browserVersion);
         }
-    }
+}
 
     // Getter methods for browser details
     public static String getBrowserVersion() {

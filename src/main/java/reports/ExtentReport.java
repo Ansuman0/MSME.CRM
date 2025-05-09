@@ -1,6 +1,6 @@
 package reports;
 
-import java.awt.Desktop;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
@@ -75,7 +75,13 @@ public final class ExtentReport {
      */
     private static void openReportInBrowser() throws FrameworkException {
         try {
-            Desktop.getDesktop().browse(new File(FrameworkConstants.getExtentReportFilePath()).toURI());
+            // Skip if running in Jenkins or in headless environment
+            boolean isJenkins = System.getenv("JENKINS_HOME") != null;
+            boolean isHeadless = GraphicsEnvironment.isHeadless();
+
+            if (!isJenkins && !isHeadless) {
+                Desktop.getDesktop().browse(new File(FrameworkConstants.getExtentReportFilePath()).toURI());
+            }
         } catch (IOException e) {
             throw new FrameworkException("Failed to open the report in browser.", e);
         }
