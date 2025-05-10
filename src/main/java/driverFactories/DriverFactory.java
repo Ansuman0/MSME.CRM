@@ -157,7 +157,7 @@ public final class DriverFactory {
         options.setCapability("pageLoadStrategy", PageLoadStrategy.EAGER);
 
         switch (options) {
-            case ChromeOptions chromeOptions -> chromeOptions.addArguments("--incognito", "--start-maximized", "--disable-gpu");
+            case ChromeOptions chromeOptions -> chromeOptions.addArguments("--incognito", "--start-maximized");
             case FirefoxOptions firefoxOptions -> firefoxOptions.addArguments("--incognito", "--start-maximized");
             case EdgeOptions edgeOptions -> edgeOptions.addArguments("--start-maximized", "--headless", "--disable-gpu","--headless=new","--disable-dev-shm-usage","--no-sandbox");
             case SafariOptions safariOptions -> {
