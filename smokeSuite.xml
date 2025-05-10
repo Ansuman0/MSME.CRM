@@ -7,7 +7,7 @@
     </listeners>
 
     <test name="Smoke Tests">
-<!--        <parameter name="xmlbrowser" value="Edge"/>-->
+        <parameter name="xmlbrowser" value="chrome"/>
         <parameter name="author" value="Ansuman"/>
         <classes>
             <class name="BusinessPartnerTest.BusinessPartnerWithCustomerTest">
