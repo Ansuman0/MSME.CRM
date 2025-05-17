@@ -2,42 +2,34 @@ package constants;
 
 import enums.ConfigProperties;
 import utilities.PropertyUtils;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class FrameworkConstants {
 
-	/**
-	 * Common Path for the all keep in single Place
-	 */
-	private static final int EXPLICITWAIT = 10;
-	private static final String RESOURCESPATH = System.getProperty("user.dir") + "/src/test/resources";
-	private static final String CONFIGFILEPATH = RESOURCESPATH + "/configuration/config.properties";
-	private static final String JSONCONFIGFILEPATH = RESOURCESPATH + "/configuration/lambadaTestConfig.json";
-	private static final String EXCELPATH = RESOURCESPATH + "/excel/testdata.xlsx";
-	private static final String EXTENTREPORTFOLDERPATH = System.getProperty("user.dir") + "/extent-test-output/";
-	private static String extentReportFilePath = "";
-	private static final String EMAILFIGFILEPATH = STR."\{RESOURCESPATH}/configuration/configEmailReports.json";
+	private static final int EXPLICIT_WAIT = 10;
+	private static final String RESOURCES_PATH = STR."\{System.getProperty("user.dir")}/src/test/resources";
+	private static final String CONFIG_FILE_PATH = STR."\{RESOURCES_PATH}/configuration/config.properties";
+	private static final String JSON_CONFIG_FILE_PATH = STR."\{RESOURCES_PATH}/configuration/lambadaTestConfig.json";
+	private static final String EXCEL_PATH = STR."\{RESOURCES_PATH}/excel/testdata.xlsx";
+	private static final String EXTENT_REPORT_FOLDER_PATH = STR."\{System.getProperty("user.dir")}/Reports";
+	private static final String EMAIL_CONFIG_FILE_PATH = STR."\{RESOURCES_PATH}/configuration/configEmailReports.json";
 
-	/**
-	 * 
-	 * @author Ansuman
-	 * @return If Override reports value in the property file is no,then the
-	 *         timestamp will be appended
-	 * @throws Exception
-	 * 
-	 */
+	private static String extentReportFilePath = "";
+
 	private static String createReportPath() {
-		if (PropertyUtils.get(ConfigProperties.OVERRIDEREPORTS).equalsIgnoreCase("no")) {
-			return EXTENTREPORTFOLDERPATH + System.currentTimeMillis() + "/index.html";
-		} else {
-			return EXTENTREPORTFOLDERPATH + "/index.html";
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyy_hhmma");
+		String formattedDateTime = LocalDateTime.now().format(dtf);
+		String reportName = STR."report-\{formattedDateTime}.html";
+
+		if ("no".equalsIgnoreCase(PropertyUtils.get(ConfigProperties.OVERRIDEREPORTS))) {
+			return STR."\{EXTENT_REPORT_FOLDER_PATH}/\{reportName}";
 		}
+		return STR."\{EXTENT_REPORT_FOLDER_PATH}/report.html";
 	}
 
-	/*
-	 * @return Extent Report path where the index.html file will be generated.
-	 */
+
 	public static String getExtentReportFilePath() {
 		if (extentReportFilePath.isEmpty()) {
 			extentReportFilePath = createReportPath();
@@ -45,21 +37,23 @@ public class FrameworkConstants {
 		return extentReportFilePath;
 	}
 
-	/*
-	 * TODO Lombak Plugin to remove the boiler plate code
-	 */
-	public static int getExplicitwait() {
-		return EXPLICITWAIT;
+	public static int getExplicitWait() {
+		return EXPLICIT_WAIT;
 	}
 
 	public static String getConfigFilePath() {
-		return CONFIGFILEPATH;
+		return CONFIG_FILE_PATH;
 	}
 
-	public static String getJsonconfigfilepath() {
-		return JSONCONFIGFILEPATH;
+	public static String getJsonConfigFilePath() {
+		return JSON_CONFIG_FILE_PATH;
 	}
 
-	public static String getEmailfigfilepath(){ return EMAILFIGFILEPATH; }
+	public static String getEmailConfigFilePath() {
+		return EMAIL_CONFIG_FILE_PATH;
+	}
 
+	public static String getExcelPath() {
+		return EXCEL_PATH;
+	}
 }
