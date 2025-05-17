@@ -28,11 +28,9 @@ public final class Driver {
 			} catch (Exception e) {
 				throw new MalformedURLException(String.format("Please check the browser capabilities for: %s", browser));
 			}
-
 			driver.manage().window().maximize();
 			driver.get(PropertyUtils.get(ConfigProperties.URL));
 		}
-
 		return driver;
 	}
 
