@@ -2,15 +2,15 @@
   "mail": {
     "enabled": true,
     "smtp": {
-      "host": "smtp.example.com",
+      "host": "smtp.gmail.com",
       "port": 587,
-      "username": "example@example.com",
-      "password": ""
+      "username": "xxxxxxx@gmail.com",
+      "password": "xxxx xxxx xxxx xxxx"
     },
-    "from": "example@example.com",
+    "from": "xxxxxx@gmail.com",
     "to": [
-      "example@example.com",
-      "example@example.com"
+      "xxxxxxxx@gmail.com",
+      "xxxxxxxx@gmail.com"
     ],
     "subject": "Test Report",
     "body": "Please find the attached report."

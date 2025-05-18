@@ -38,7 +38,7 @@ public class EmailUtility {
     static {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            config = objectMapper.readValue(new File(FrameworkConstants.getEmailfigfilepath()), EmailUtility.class);
+            config = objectMapper.readValue(new File(FrameworkConstants.getEmailConfigFilePath() ), EmailUtility.class);
             System.out.println(STR."Email enabled: \{config.mail.enabled}");  // Debugging: log if enabled is loaded
         } catch (IOException e) {
             System.err.println(STR."Error loading configuration: \{e.getMessage()}");

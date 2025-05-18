@@ -25,7 +25,7 @@ public class JsonUtils {
 	static {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			CONFIGMAP = mapper.readValue(new File(FrameworkConstants.getJsonconfigfilepath()),
+			CONFIGMAP = mapper.readValue(new File(FrameworkConstants.getJsonConfigFilePath()),
 					new TypeReference<Map<String, String>>() {
 					});
 		} catch (Exception e) {
