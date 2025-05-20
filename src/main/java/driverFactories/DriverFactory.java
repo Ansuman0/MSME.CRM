@@ -32,7 +32,6 @@ public final class DriverFactory {
 
     private static String browserVersion = "";
     private static String browserName = "";
-    static WebDriverManager driverManager;
 
     @Parameters("browser")
     public static WebDriver getDriver(final String browser, final String version) throws DriverCreationException {
@@ -63,25 +62,26 @@ public final class DriverFactory {
 
         switch (browser.toLowerCase()) {
             case "chrome" -> {
-                driverManager = WebDriverManager.chromedriver();
+                WebDriverManager.chromedriver().setup(); //  Ensure the driver is set up
                 ChromeOptions chromeOptions = new ChromeOptions();
                 setCommonOptions(chromeOptions);
-                return new ChromeDriver(chromeOptions);
+                return new ChromeDriver(chromeOptions); // Only instantiate once
             }
             case "firefox" -> {
-                driverManager = WebDriverManager.firefoxdriver();
+                WebDriverManager.firefoxdriver().setup(); // Ensure setup
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
                 setCommonOptions(firefoxOptions);
                 return new FirefoxDriver(firefoxOptions);
             }
             case "edge" -> {
-                driverManager = WebDriverManager.edgedriver();
+                WebDriverManager.edgedriver().setup(); // Ensure setup
                 EdgeOptions edgeOptions = new EdgeOptions();
                 setCommonOptions(edgeOptions);
                 return new EdgeDriver(edgeOptions);
             }
             case "safari" -> {
-                driverManager = WebDriverManager.safaridriver();
+                // SafariDriver does not need setup with WebDriverManager usually, but keep it for consistency
+                WebDriverManager.safaridriver().setup();
                 SafariOptions safariOptions = new SafariOptions();
                 setCommonOptions(safariOptions);
                 return new SafariDriver(safariOptions);
@@ -89,6 +89,7 @@ public final class DriverFactory {
             default -> throw new IllegalArgumentException(String.format("Unsupported browser: %s", browser));
         }
     }
+
 
     private static MutableCapabilities getBrowserOptions(final String browser) {
         return switch (browser.toLowerCase()) {
